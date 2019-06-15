@@ -1,74 +1,146 @@
-
-#! coding: Shift_JIS
-
+ï»¿
 import cv2
+
 import numpy as np
+
 import math
 
-'''
-ˆø”	‰æ‘œ(cv::Mat)
-–ß‚è’l	[‹——£,Šp“x]
+
 
 '''
+
+å¼•æ•°	ç”»åƒ(cv::Mat)
+
+æˆ»ã‚Šå€¤	[è·é›¢,è§’åº¦]
+
+'''
+
+
 
 def GoalDetection(img):
 
+
+
 	#cv2.imshow('Input Image',img)
 
-	#Ômask¶¬
+	hig, wid, col = img.shape
+
+	#èµ¤maskç”Ÿæˆ
+
 	img_HSV = cv2.cvtColor(cv2.GaussianBlur(img,(15,15),0),cv2.COLOR_BGR2HSV_FULL)
+
 	h = img_HSV[:, :, 0]
+
 	s = img_HSV[:, :, 1]
+
 	mask1 = np.zeros(h.shape, dtype=np.uint8)
+
 	mask1[((h < 10) | (h > 200)) & (s > 120)] = 255
+
 	#cv2.imshow('Red Zone', mask1)
+
 	
-	#—ÖŠsˆ—
+
+	#è¼ªéƒ­å‡¦ç†
+
 	contours, hierarchy = cv2.findContours(mask1, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
 	
-	#Å‘å–ÊÏ	
+
+	#æœ€å¤§é¢ç©	
+
 	max_area = 0
+
 	max_area_contour = -1
+
 	for j in range(0,len(contours)):
+
 		area = cv2.contourArea(contours[j])
+
 		if max_area < area:
+
 			max_area = area
+
 			max_area_contour = j
+
 	
+
 	cnt = contours[max_area_contour]
-	print('Å‘å–ÊÏ‚Í',max_area)
 
-	#goal–¢ŒŸo
+	#print('Max area is',max_area)
+
+
+
+	#goalæœªæ¤œå‡ºæ™‚
+
 	if max_area <= 100:
-		print( "ƒR[ƒ“‚ªŒŸo‚³‚ê‚Ü‚¹‚ñ‚Å‚µ‚½B" )
+
+		print( "There is not the target" )
+
 		cv2.waitKey()
+
 		cv2.destroyAllWindows()
+
 		return [-1,-1]
-	#goal”»’è
+
+	#goalåˆ¤å®š
+
 	if max_area >= 80000:
-		print( "ƒS[ƒ‹!!!!!!!!" )
+
+		print( "GOAL" )
+
 		cv2.waitKey()
+
 		cv2.destroyAllWindows()
+
 		return [0,0]
+
 	
-	#‚’¼‚È‹éŒ`
+
+	#å‚ç›´ãªçŸ©å½¢
+
 	x,y,w,h = cv2.boundingRect(cnt)
+
 	#img = cv2.rectangle(img,(x,y),(x+w,y+h),(0,255,0),2)
-	print('ƒ^[ƒQƒbƒg‚Ì’†SÀ•W‚Í:',x+w/2) 
-	img = cv2.circle(img,(int(x+w/2),int(y+h/2)), 5, (255,0,0), -1, cv2.LINE_AA)
 
-	#‹——£ŒvZ
-	L1 = 10		#Šî€‹——£
-	S1 = 200	#Šî€–ÊÏ
-	L2 = L1*math.sqrt(S1)/math.sqrt(max_area)
+	GAP = x+w/2-wid/2
+
+	if GAP >= 0:
+		print('The target is', GAP, 'degrees to the right')
+
+	if GAP < 0:
+		print('The target is', abs(GAP), 'degrees to the left')
+
+	img = cv2.circle(img,(int(x+w/2),int(y+3*h/4)), 2, (255,0,0), -1, cv2.LINE_AA)
 
 
-	cv2.imshow("target", img);
+
+	#è·é›¢è¨ˆç®—
+
+	L_samp = 10		#åŸºæº–è·é›¢
+
+	S_samp = 200	#åŸºæº–é¢ç©
+
+	L = L_samp*math.sqrt(S_samp)/math.sqrt(max_area)
+
+	print('The target is', '{:.1f}'.format(L), 'm from here')
+
+
+
+	cv2.imshow("target", img)
+
 	cv2.waitKey()	
+
 	cv2.destroyAllWindows()
 
-	return [L2,x+w/2]
+
+
+	return [L,GAP]
+
 		
 
-im = cv2.imread('target10.jpg')
-print (GoalDetection(im))
+
+
+im = cv2.imread('picture/target10.jpg')
+
+GoalDetection(im)
