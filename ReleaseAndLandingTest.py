@@ -55,18 +55,30 @@ def close():
 
 if __name__ == "__main__":
 	print("Program Start  {0}".format(time.time()))
+
 	try:
 		setup()
 		time.sleep(t)
+
+        count=0
 
         tx1 = time.time()
 		tx2 = tx1
 
         #溶断まで
+        print("Releasing Judgement Program Start  {0}".format(time.time()))
         #ループx
         while(1):
             #放出判定
-            if 光判定 or 気圧判定:
+            luxdata=TSL2561.readLux
+            if luxdata[0]>300 or luxdata[1]>300:
+                count+=1
+            if count>4:
+                luxjudge=True
+            else:
+                luxjudge=False
+
+            if luxjudge or 気圧判定:
                 ty1=time.time()
                 ty2=ty1
                 #ループyのタイムアウト判定
@@ -80,6 +92,7 @@ if __name__ == "__main__":
                 #ループy中でbreakが起きなければ続行、起きたら全体も抜ける
                 else:
                     continue
+                print("Landing.  {0}".format(time.time()))
                 break
             #放出されず、かつループxでタイムアウト
             else if tx2-tx1>=x:
