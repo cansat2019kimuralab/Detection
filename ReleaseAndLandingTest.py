@@ -69,24 +69,44 @@ if __name__ == "__main__":
         print("Releasing Judgement Program Start  {0}".format(time.time()))
         #ループx
         while(1):
-            #放出判定
+            #tx2を更新
+            tx2=time.time()
+            #放出判定(照度センサ)
             luxdata=TSL2561.readLux
             if luxdata[0]>300 or luxdata[1]>300:
-                count+=1
-            if count>4:
+                lcount+=1
+            if lcount>4:
                 luxjudge=True
             else:
                 luxjudge=False
+            #放出判定（気圧センサ）
+                #3秒おきに気圧から高度を取得
+                bme280Data = BME280.bme280_read()
+                P0=float(bme280Date[3])
+                time.aleep(3)
+                bme280Data = BME280.bme280_read()
+                P1=float(bme280Date[3])
+                #3秒前の値と比較
+                altgap=P0-P1
+                if altgap>0
+                    acount+=1
+                if acount>3
+                    presjudge=True
+                else:
+                    presjudge=False
 
-            if luxjudge or 気圧判定:
+
+            if luxjudge or presjudge:
                 ty1=time.time()
                 ty2=ty1
+                print("RELEASE")
                 #ループyのタイムアウト判定
                 while(ty2-ty1<=y):
+                    ty2=time.time()
                     #気圧と高度が変化していたら撮影
                     if 気圧変化 and 高度変化:
                         撮影
-                    #片方に変化なければ着地、ループyを抜ける
+                    #両方に変化なければ着地、ループyを抜ける
                     else:
                         break
                 #ループy中でbreakが起きなければ続行、起きたら全体も抜ける
