@@ -100,6 +100,7 @@ if __name__ == "__main__":
                 ty1=time.time()
                 ty2=ty1
                 print("RELEASE")
+                ''''
                 #ループyのタイムアウト判定
                 while(ty2-ty1<=y):
                     ty2=time.time()
@@ -139,3 +140,4 @@ if __name__ == "__main__":
 		IM920.Send("Error Occured")
 		IM920.Send("Program Stopped")
 		print(e.message)
+        '''''
