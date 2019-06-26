@@ -43,11 +43,11 @@ def setup():
 	BME280.bme280_calib_param()
 	BMX055.bmx055_setup()
 	GPS.openGPS()
-	with open('/log/releaseLog.txt', 'w'):
+	with open('log/releaseLog.txt', 'w'):
 		pass
-	with open('/log/runningLog.txt', 'w'):
+	with open('log/runningLog.txt', 'w'):
 		pass
-	with open('/log/landingLog.txt', 'w'):
+	with open('log/landingLog.txt', 'w'):
 		pass
 
 def close():
@@ -59,77 +59,77 @@ if __name__ == "__main__":
 	try:
 		setup()
 		time.sleep(t)
-
-        count=0
-
-        tx1 = time.time()
+		
+		lcount=0
+		acount=0
+		tx1 = time.time()
 		tx2 = tx1
 
-        #溶断まで
-        print("Releasing Judgement Program Start  {0}".format(time.time()))
-        #ループx
-        while(1):
-            #tx2を更新
-            tx2=time.time()
-            #放出判定(照度センサ)
-            luxdata=TSL2561.readLux
-            if luxdata[0]>300 or luxdata[1]>300:
-                lcount+=1
-            if lcount>4:
-                luxjudge=True
-            else:
-                luxjudge=False
-            #放出判定（気圧センサ）
-                #3秒おきに気圧から高度を取得
-                bme280Data = BME280.bme280_read()
-                P0=float(bme280Date[3])
-                time.aleep(3)
-                bme280Data = BME280.bme280_read()
-                P1=float(bme280Date[3])
-                #3秒前の値と比較
-                altgap=P0-P1
-                if altgap>0
-                    acount+=1
-                if acount>3
-                    presjudge=True
-                else:
-                    presjudge=False
+		#溶断まで
+		print("Releasing Judgement Program Start  {0}".format(time.time()))
+		#ループx
+		while(1):
+			#tx2を更新
+			tx2=time.time()
+			#放出判定(照度センサ)
+			luxdata=TSL2561.readLux()
+			if luxdata[0]>300 or luxdata[1]>300:
+				lcount+=1
+			if lcount>4:
+				luxjudge=True
+			else:
+				luxjudge=False
+			#放出判定（気圧センサ）
+				#3秒おきに気圧から高度を取得
+				bme280Data = BME280.bme280_read()
+				P0=float(bme280Data[3])
+				time.sleep(3)
+				bme280Data = BME280.bme280_read()
+				P1=float(bme280Data[3])
+				#3秒前の値と比較
+				altgap=P0-P1
+				if altgap>0:
+					acount+=1
+				if acount>3:
+					presjudge=True
+				else:
+					presjudge=False
 
 
-            if luxjudge or presjudge:
-                ty1=time.time()
-                ty2=ty1
-                print("RELEASE")
-                ''''
-                #ループyのタイムアウト判定
-                while(ty2-ty1<=y):
-                    ty2=time.time()
-                    #気圧と高度が変化していたら撮影
-                    if 気圧変化 and 高度変化:
-                        撮影
-                    #両方に変化なければ着地、ループyを抜ける
-                    else:
-                        break
-                #ループy中でbreakが起きなければ続行、起きたら全体も抜ける
-                else:
-                    continue
-                print("Landing.  {0}".format(time.time()))
-                break
-            #放出されず、かつループxでタイムアウト
-            else if tx2-tx1>=x:
-                tz1=time.time()
-                tz2=tz1
-                #ループzのタイムアウト判定
-                while(tz2-tz1<=z):
-                    #気圧が変化しなければループzを抜ける
-                    if not 気圧変化:
-                        break
-                #ループz中でbreakが起きなければ続行、起きたら全体も抜ける
-                else:
-                    continue
-                break
-
-        #溶断へ
+			if luxjudge or presjudge:
+				ty1=time.time()
+				ty2=ty1
+				print("RELEASE")
+				'''
+				#ループyのタイムアウト判定
+				while(ty2-ty1<=y):
+					ty2=time.time()
+					#気圧と高度が変化していたら撮影
+					if 気圧変化 and 高度変化:
+						撮影
+					#両方に変化なければ着地、ループyを抜ける
+					else:
+						break
+				#ループy中でbreakが起きなければ続行、起きたら全体も抜ける
+				else:
+					continue
+				print("Landing.  {0}".format(time.time()))
+				break
+			#放出されず、かつループxでタイムアウト
+			else if tx2-tx1>=x:
+				tz1=time.time()
+				tz2=tz1
+				#ループzのタイムアウト判定
+				while(tz2-tz1<=z):
+					#気圧が変化しなければループzを抜ける
+					if not 気圧変化:
+						break
+				#ループz中でbreakが起きなければ続行、起きたら全体も抜ける
+				else:
+					continue
+				break
+'''
+		#溶断へ
 
 
 	except KeyboardInterrupt:
@@ -140,4 +140,4 @@ if __name__ == "__main__":
 		IM920.Send("Error Occured")
 		IM920.Send("Program Stopped")
 		print(e.message)
-        '''''
+		
