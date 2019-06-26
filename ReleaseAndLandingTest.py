@@ -60,8 +60,8 @@ if __name__ == "__main__":
 		setup()
 		time.sleep(t)
 
-        count=0
-
+        lcount=0
+        acount=0
         tx1 = time.time()
 		tx2 = tx1
 
