@@ -69,79 +69,79 @@ if __name__ == "__main__":
 		print("Releasing Judgement Program Start  {0}".format(time.time()))
 		#ループx
 		with open('log/releaseLog.txt', 'a') as f:
-		while(1):
-			
-			#tx2を更新
-			tx2=time.time()
-			#放出判定(照度センサ)
-			luxdata=TSL2561.readLux()
-			#f.write(str(luxdata[0])+":"+str(luxdata[1]))
-			print("lux1: "+str(luxdata[0])+" "+"lux2: "+str(luxdata[1]))
-			f.write(str(luxdata[0])+"	"+str(luxdata[1]))
-			
-			if luxdata[0]>500 or luxdata[1]>370:
-				lcount+=1
-			if lcount>4:
-				luxjudge=True
-				print("luxjudge")
-			else:
-				luxjudge=False
-			#放出判定（気圧センサ）	
-				PRESS=bme280Data[1]       
-				deltA=PRESS
-				bme280Data=BME280.bme280_read()	#更新
-				PRESS=bme280Data[1]
-				deltA=deltA-PRESS
-				#f.write("P0:P1"+str(P0)+":"+str(P1))
-				print(str(PRESS))
-				print(str(deltA))
-				time.sleep(3)
-				#3秒前の値と比較
-				#高度差が式一以上でacout+=1
-				if deltA>2:
-					acount+=1
-				if acount>3:
-					presjudge=True
-					print("presjudge")
+			while(1):
+				
+				#tx2を更新
+				tx2=time.time()
+				#放出判定(照度センサ)
+				luxdata=TSL2561.readLux()
+				#f.write(str(luxdata[0])+":"+str(luxdata[1]))
+				print("lux1: "+str(luxdata[0])+" "+"lux2: "+str(luxdata[1]))
+				f.write(str(luxdata[0])+"	"+str(luxdata[1]))
+				
+				if luxdata[0]>500 or luxdata[1]>370:
+					lcount+=1
+				if lcount>4:
+					luxjudge=True
+					print("luxjudge")
 				else:
-					presjudge=False
-
-
-			if luxjudge or presjudge:
-				ty1=time.time()
-				ty2=ty1
-				print("RELEASE!")
-				''''
-				#ループyのタイムアウト判定
-				while(ty2-ty1<=y):
-					ty2=time.time()
-					#気圧と高度が変化していたら撮影
-
-					if 気圧変化 and 高度変化:
-						撮影
-					#両方に変化なければ着地、ループyを抜ける
+					luxjudge=False
+				#放出判定（気圧センサ）	
+					PRESS=bme280Data[1]       
+					deltA=PRESS
+					bme280Data=BME280.bme280_read()	#更新
+					PRESS=bme280Data[1]
+					deltA=deltA-PRESS
+					#f.write("P0:P1"+str(P0)+":"+str(P1))
+					print(str(PRESS))
+					print(str(deltA))
+					time.sleep(3)
+					#3秒前の値と比較
+					#高度差が式一以上でacout+=1
+					if deltA>2:
+						acount+=1
+					if acount>3:
+						presjudge=True
+						print("presjudge")
 					else:
-						break
-				#ループy中でbreakが起きなければ続行、起きたら全体も抜ける
-				else:
-					continue
-				print("Landing.  {0}".format(time.time()))
-				break
-			#放出されず、かつループxでタイムアウト
-			else if tx2-tx1>=x:
-				tz1=time.time()
-				tz2=tz1
-				#ループzのタイムアウト判定
-				while(tz2-tz1<=z):
-					#気圧が変化しなければループzを抜ける
-					if not 気圧変化:
-						break
-				#ループz中でbreakが起きなければ続行、起きたら全体も抜ける
-				else:
-					continue
-				break
-	'''
-			#溶断へ
+						presjudge=False
+
+
+				if luxjudge or presjudge:
+					ty1=time.time()
+					ty2=ty1
+					print("RELEASE!")
+					''''
+					#ループyのタイムアウト判定
+					while(ty2-ty1<=y):
+						ty2=time.time()
+						#気圧と高度が変化していたら撮影
+
+						if 気圧変化 and 高度変化:
+							撮影
+						#両方に変化なければ着地、ループyを抜ける
+						else:
+							break
+					#ループy中でbreakが起きなければ続行、起きたら全体も抜ける
+					else:
+						continue
+					print("Landing.  {0}".format(time.time()))
+					break
+				#放出されず、かつループxでタイムアウト
+				else if tx2-tx1>=x:
+					tz1=time.time()
+					tz2=tz1
+					#ループzのタイムアウト判定
+					while(tz2-tz1<=z):
+						#気圧が変化しなければループzを抜ける
+						if not 気圧変化:
+							break
+					#ループz中でbreakが起きなければ続行、起きたら全体も抜ける
+					else:
+						continue
+					break
+		'''
+				#溶断へ
 
 
 	except KeyboardInterrupt:
