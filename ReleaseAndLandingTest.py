@@ -75,18 +75,17 @@ if __name__ == "__main__":
 			luxdata=TSL2561.readLux()
 			#f.write(str(luxdata[0])+":"+str(luxdata[1]))
 			print("lux1: "+str(luxdata[0])+" "+"lux2: "+str(luxdata[1]))
-			if luxdata[0]>370 or luxdata[1]>370:
+			if luxdata[0]>500 or luxdata[1]>370:
 				lcount+=1
 			if lcount>4:
 				luxjudge=True
 				print("luxjudge")
 			else:
 				luxjudge=False
-		    #放出判定（気圧センサ）
-				#3秒おきにを取得	
-				PRESS=bme280Data[1]
+		    #放出判定（気圧センサ）	
+				PRESS=bme280Data[1]       
 				deltA=PRESS
-				bme280Data=BME280.bme280_read()	
+				bme280Data=BME280.bme280_read()	#更新
 				PRESS=bme280Data[1]
 				deltA=deltA-PRESS
 				#f.write("P0:P1"+str(P0)+":"+str(P1))
