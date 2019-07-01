@@ -74,7 +74,7 @@ if __name__ == "__main__":
 			#放出判定(照度センサ)
 			luxdata=TSL2561.readLux()
 			#f.write(str(luxdata[0])+":"+str(luxdata[1]))
-			print(str(luxdata[0])+" "+str(luxdata[1]))
+			print("lux1"+str(luxdata[0])+" "+"lux2"+str(luxdata[1]))
 			if luxdata[0]>300 or luxdata[1]>300:
 				lcount+=1
 			if lcount>4:
@@ -90,7 +90,7 @@ if __name__ == "__main__":
 				bme280Data = BME280.bme280_read()
 				P1=float(bme280Data[3])
 				#f.write("P0:P1"+str(P0)+":"+str(P1))
-				print(str(P0)+" "+str(P1))
+				print("p0"+str(P0)+" "+"p1"+str(P1))
 				#3秒前の値と比較
 				altgap=P0-P1
 				if altgap>0:
@@ -105,7 +105,7 @@ if __name__ == "__main__":
 			if luxjudge or presjudge:
 				ty1=time.time()
 				ty2=ty1
-				print("RELEASE")
+				print("RELEASE!")
 				''''
 				#ループyのタイムアウト判定
 				while(ty2-ty1<=y):
