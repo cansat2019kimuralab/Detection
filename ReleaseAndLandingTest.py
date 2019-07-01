@@ -59,7 +59,7 @@ if __name__ == "__main__":
 	try:
 		setup()
 		time.sleep(t)
-
+		bme280Data=BME280.bme280_read()	
 		lcount=0
 		acount=0
 		tx1 = time.time()
@@ -83,8 +83,7 @@ if __name__ == "__main__":
 			else:
 				luxjudge=False
 		    #放出判定（気圧センサ）
-				#3秒おきにを取得
-				bme280Data=BME280.bme280_read()	
+				#3秒おきにを取得	
 				PRESS=bme280Data[1]
 				deltA=PRESS
 				bme280Data=BME280.bme280_read()	
