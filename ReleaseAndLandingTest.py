@@ -69,6 +69,7 @@ if __name__ == "__main__":
 		print("Releasing Judgement Program Start  {0}".format(time.time()))
 		#ループx
 		while(1):
+			with open('log/releaseLog.txt', 'w') as f:
 			#tx2を更新
 			tx2=time.time()
 			#放出判定(照度センサ)
