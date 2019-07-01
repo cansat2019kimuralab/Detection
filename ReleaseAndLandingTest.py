@@ -75,7 +75,7 @@ if __name__ == "__main__":
 			luxdata=TSL2561.readLux()
 			#f.write(str(luxdata[0])+":"+str(luxdata[1]))
 			print("lux1: "+str(luxdata[0])+" "+"lux2: "+str(luxdata[1]))
-			if luxdata[0]>300 or luxdata[1]>300:
+			if luxdata[0]>370 or luxdata[1]>370:
 				lcount+=1
 			if lcount>4:
 				luxjudge=True
@@ -93,9 +93,10 @@ if __name__ == "__main__":
 				print("p0: "+str(P0)+" "+"p1: "+str(P1))
 				#3秒前の値と比較
 				altgap=P0-P1
-				if altgap>0:
+				#高度差が式一以上でacout+=1
+				if altgap>2:
 				    acount+=1
-				if acount>3:
+				if acount>:
 				    presjudge=True
 				    print("presjudge")
 				else:
