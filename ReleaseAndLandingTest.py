@@ -76,7 +76,7 @@ if __name__ == "__main__":
 			#f.write(str(luxdata[0])+":"+str(luxdata[1]))
 			print("lux1: "+str(luxdata[0])+" "+"lux2: "+str(luxdata[1]))
 			f.write(str(luxdata[0])+"	"+str(luxdata[1]))
-			])
+		
 			if luxdata[0]>500 or luxdata[1]>370:
 				lcount+=1
 			if lcount>4:
