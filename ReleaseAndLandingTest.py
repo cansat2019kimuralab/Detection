@@ -96,7 +96,7 @@ if __name__ == "__main__":
 				#高度差が式一以上でacout+=1
 				if altgap>2:
 				    acount+=1
-				if acount>:
+				if acount>3:
 				    presjudge=True
 				    print("presjudge")
 				else:
