@@ -83,12 +83,12 @@ if __name__ == "__main__":
 			else:
 				luxjudge=False
 		    #放出判定（気圧センサ）
-				#3秒おきに気圧から高度を取得
+				#3秒おきにを取得
 				bme280Data = BME280.bme280_read()
-				P0=float(bme280Data[3])
+				P0=float(bme280Data[2])
 				time.sleep(3)
 				bme280Data = BME280.bme280_read()
-				P1=float(bme280Data[3])
+				P1=float(bme280Data[2])
 				#f.write("P0:P1"+str(P0)+":"+str(P1))
 				print("p0: "+str(P0)+" "+"p1: "+str(P1))
 				#3秒前の値と比較
