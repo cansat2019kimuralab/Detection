@@ -112,12 +112,25 @@ if __name__ == "__main__":
 					ty1=time.time()
 					ty2=ty1
 					print("RELEASE!")
-					''''
+					bme280Data=BME280.bme280_read()	
+					gpsData = GPS.readGPS()
 					#ループyのタイムアウト判定
 					while(ty2-ty1<=y):
 						ty2=time.time()
-						#気圧と高度が変化していたら撮影
+						#気圧判定
+						PRESS=bme280Data[1]       
+						deltA=PRESS
+						bme280Data=BME280.bme280_read()	#更新
+						PRESS=bme280Data[1]
+						deltA=deltA-PRESS
+						#GPS高度判定
+						Gheight=gpsData[4]
+						deltH=Gheight	
+						gpsData=GPS.readGPS()　#更新
+						Gheight=gpsData[4]
+						deltH=deltH-Gheight
 
+						#気圧と高度が変化していたら撮影
 						if 気圧変化 and 高度変化:
 							撮影
 						#両方に変化なければ着地、ループyを抜ける
