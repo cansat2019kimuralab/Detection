@@ -84,17 +84,19 @@ if __name__ == "__main__":
 				luxjudge=False
 		    #放出判定（気圧センサ）
 				#3秒おきにを取得
-				bme280Data = BME280.bme280_read()
-				P0=bme280Data[2]
-				time.sleep(3)
-				bme280Data = BME280.bme280_read()
-				P1=bme280Data[2]
+				bme280Data=BME280.bme280_read()	
+				PRESS=bme280Data[1]
+				deltA=PRESS
+				bme280Data=BME280.bme280_read()	
+				PRESS=bme280Data[1]
+				deltA=deltA-PRESS
 				#f.write("P0:P1"+str(P0)+":"+str(P1))
-				print("p0: "+str(P0)+" "+"p1: "+str(P1))
+				print(str(PRESS))
+				print(str(deltA))
+				time.sleep(3)
 				#3秒前の値と比較
-				altgap=P0-P1
 				#高度差が式一以上でacout+=1
-				if altgap>2:
+				if deltA>2:
 				    acount+=1
 				if acount>3:
 				    presjudge=True
