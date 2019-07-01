@@ -75,6 +75,8 @@ if __name__ == "__main__":
 			luxdata=TSL2561.readLux()
 			#f.write(str(luxdata[0])+":"+str(luxdata[1]))
 			print("lux1: "+str(luxdata[0])+" "+"lux2: "+str(luxdata[1]))
+			f.write(str(luxdata[0])+"	"+str(luxdata[1]))
+			])
 			if luxdata[0]>500 or luxdata[1]>370:
 				lcount+=1
 			if lcount>4:
@@ -112,6 +114,7 @@ if __name__ == "__main__":
 				while(ty2-ty1<=y):
 				    ty2=time.time()
 				    #気圧と高度が変化していたら撮影
+
 				    if 気圧変化 and 高度変化:
 						撮影
 				    #両方に変化なければ着地、ループyを抜ける
