@@ -25,9 +25,9 @@ bmx055str = ["accx", "accy", "accz", "gyrx", "gyry", "gyrz", "dirx", "diry", "di
 gpsstr = ["utctime", "lat", "lon", "sHeight", "gHeight"]
 
 t = 10	#待機時間
-x = 10	#放出判定の時間
-y = 10	#着地判定の時間
-z = 10	#走行の時間
+x = 61	#放出判定の時間
+y = 60	#着地判定の時間
+z = 120	#走行の時間
 
 pi=pigpio.pi()
 
