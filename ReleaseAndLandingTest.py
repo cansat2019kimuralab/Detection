@@ -83,10 +83,10 @@ if __name__ == "__main__":
 				if luxdata[0]>500 or luxdata[1]>370:
 					lcount+=1
 				if lcount>4:
-					luxjudge=True
-					print("luxjudge")
+					luxreleasejudge=True
+					print("luxreleasejudge")
 				else:
-					luxjudge=False
+					luxreleasejudge=False
 				#放出判定（気圧センサ）	
 					PRESS=bme280Data[1]       
 					deltA=PRESS
@@ -102,13 +102,13 @@ if __name__ == "__main__":
 					if deltA>2:
 						acount+=1
 					if acount>3:
-						presjudge=True
+						presreleasejudge=True
 						print("presjudge")
 					else:
-						presjudge=False
+						presreleasejudge=False
 
 
-				if luxjudge or presjudge:
+				if luxreleasejudge or presreleasejudge:
 					ty1=time.time()
 					ty2=ty1
 					print("RELEASE!")
@@ -119,19 +119,36 @@ if __name__ == "__main__":
 						ty2=time.time()
 						#気圧判定
 						PRESS=bme280Data[1]       
-						deltA=PRESS
+						deltP=PRESS
 						bme280Data=BME280.bme280_read()	#更新
 						PRESS=bme280Data[1]
-						deltA=deltA-PRESS
+						deltP=deltP-PRESS
+						if deltP>0.8:
+							Pcount+=1
+						if Pcount>5:
+							preslandingjudge=True
+							print("presladingjudge")
+						else:
+							preslandingjudge＝False
 						#GPS高度判定
 						Gheight=gpsData[4]
 						deltH=Gheight	
 						gpsData=GPS.readGPS()　#更新
 						Gheight=gpsData[4]
 						deltH=deltH-Gheight
+						#3秒ごとに判定
+						time.sleep(3)
+						if deltH<5:
+							GAcount+=1
+						if GAcount>5:
+							GPSlandingjudge=True
+							print("GPSlandingjudge")
+						else:
+							GPSlandingjudge=False
+
 
 						#気圧と高度が変化していたら撮影
-						if 気圧変化 and 高度変化:
+						if not preslandingjudge and not GPSlandingjudge:
 							撮影
 						#両方に変化なければ着地、ループyを抜ける
 						else:
