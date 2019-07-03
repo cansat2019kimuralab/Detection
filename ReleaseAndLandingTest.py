@@ -129,12 +129,11 @@ if __name__ == "__main__":
 							preslandingjudge=True
 							print("presladingjudge")
 						else:
-							preslandingjudge＝False
-							print("NOW falling")
+							preslandingjudge=False
 						#GPS高度判定
 						Gheight=gpsData[4]
 						deltH=Gheight	
-						gpsData=GPS.readGPS()　#更新
+						gpsData=GPS.readGPS()
 						Gheight=gpsData[4]
 						deltH=deltH-Gheight
 						#3秒ごとに判定
@@ -161,7 +160,7 @@ if __name__ == "__main__":
 					print("Landing.  {0}".format(time.time()))
 					break
 				#放出されず、かつループxでタイムアウト
-				else if tx2-tx1>=x:
+				elif tx2-tx1>=x:
 					tz1=time.time()
 					tz2=tz1
 					#ループzのタイムアウト判定
@@ -173,7 +172,7 @@ if __name__ == "__main__":
 					else:
 						continue
 					break
-		'''
+		
 				#溶断へ
 
 
