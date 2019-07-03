@@ -130,6 +130,7 @@ if __name__ == "__main__":
 							print("presladingjudge")
 						else:
 							preslandingjudge＝False
+							print("NOW falling")
 						#GPS高度判定
 						Gheight=gpsData[4]
 						deltH=Gheight	
@@ -149,7 +150,8 @@ if __name__ == "__main__":
 
 						#気圧と高度が変化していたら撮影
 						if not preslandingjudge and not GPSlandingjudge:
-							撮影
+							print("satuei")
+							#撮影
 						#両方に変化なければ着地、ループyを抜ける
 						else:
 							break
@@ -165,7 +167,7 @@ if __name__ == "__main__":
 					#ループzのタイムアウト判定
 					while(tz2-tz1<=z):
 						#気圧が変化しなければループzを抜ける
-						if not 気圧変化:
+						if not preslandingjudge:
 							break
 					#ループz中でbreakが起きなければ続行、起きたら全体も抜ける
 					else:
