@@ -165,6 +165,20 @@ if __name__ == "__main__":
 					tz2=tz1
 					#ループzのタイムアウト判定
 					while(tz2-tz1<=z):
+						PRESS=bme280Data[1]       
+						deltP=PRESS
+						bme280Data=BME280.bme280_read()	#更新
+						PRESS=bme280Data[1]
+						deltP=deltP-PRESS
+						#3秒ごとに判定
+						time.sleep(3)
+						if deltP>0.8:
+							Pcount+=1
+						if Pcount>5:
+							preslandingjudge=True
+							print("presladingjudge")
+						else:
+							preslandingjudge=False
 						#気圧が変化しなければループzを抜ける
 						if not preslandingjudge:
 							break
