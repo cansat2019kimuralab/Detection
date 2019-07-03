@@ -149,7 +149,7 @@ if __name__ == "__main__":
 
 						#気圧と高度が変化していたら撮影
 						if not preslandingjudge and not GPSlandingjudge:
-							print("satuei")
+							print("satueinow")
 							#撮影
 						#両方に変化なければ着地、ループyを抜ける
 						else:
@@ -170,7 +170,7 @@ if __name__ == "__main__":
 						bme280Data=BME280.bme280_read()	#更新
 						PRESS=bme280Data[1]
 						deltP=deltP-PRESS
-						#3秒ごとに判定
+						#3秒ごとに判定.
 						time.sleep(3)
 						if deltP>0.8:
 							Pcount+=1
