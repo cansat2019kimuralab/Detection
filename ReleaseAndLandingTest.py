@@ -29,6 +29,7 @@ x = 61	#放出判定の時間
 y = 60	#着地判定の時間
 z = 120	#走行の時間
 
+
 pi=pigpio.pi()
 
 def gpsSend(gpsData):
@@ -62,6 +63,8 @@ if __name__ == "__main__":
 		bme280Data=BME280.bme280_read()	
 		lcount=0
 		acount=0
+		Pcount=0
+		GAcount=0
 		tx1 = time.time()
 		tx2 = tx1
 
@@ -80,7 +83,7 @@ if __name__ == "__main__":
 				f.write(str(luxdata[0])+"	"+str(luxdata[1])+ "\t")
 				f.write("\n")
 				
-				if luxdata[0]>500 or luxdata[1]>370:
+				if luxdata[0]>300 or luxdata[1]>300:
 					lcount+=1
 				if lcount>4:
 					luxreleasejudge=True
@@ -163,33 +166,34 @@ if __name__ == "__main__":
 				elif tx2-tx1>=x:
 					tz1=time.time()
 					tz2=tz1
+					print("X timeout")
 					#ループzのタイムアウト判定
 					while(tz2-tz1<=z):
+						tz2=time.time()
 						PRESS=bme280Data[1]       
 						deltP=PRESS
 						bme280Data=BME280.bme280_read()	#更新
 						PRESS=bme280Data[1]
 						deltP=deltP-PRESS
+						print(PRESS)
 						#3秒ごとに判定.
 						time.sleep(3)
-						if deltP>0.8:
+						if deltP<0.8:
 							Pcount+=1
 						if Pcount>5:
 							preslandingjudge=True
-							print("presladingjudge")
+							print("preslandjudge")
 						else:
 							preslandingjudge=False
 						#気圧が変化しなければループzを抜ける
-						if not preslandingjudge:
+						if  preslandingjudge:
 							break
 					#ループz中でbreakが起きなければ続行、起きたら全体も抜ける
 					else:
 						continue
 					break
-		
-				#溶断へ
-
-
+#溶断へ
+		print("outcasing")
 	except KeyboardInterrupt:
 		close()
 		print("\r\nKeyboard Intruppted")
