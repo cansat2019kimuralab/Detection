@@ -104,6 +104,8 @@ if __name__ == "__main__":
 					#高度差が式一以上でacout+=1
 					if deltA>2:
 						acount+=1
+					else if deltA<2 and acount>0:
+						acount-=1
 					if acount>3:
 						presreleasejudge=True
 						print("presjudge")
@@ -129,6 +131,8 @@ if __name__ == "__main__":
 						print(PRESS)
 						if deltP<0.8:
 							Pcount+=1
+						else if deltP>0.8 and Pcount>0:
+							Pcount-=1
 						if Pcount>5:
 							preslandjudge=True
 							print("preslandjudge")
@@ -145,6 +149,8 @@ if __name__ == "__main__":
 						time.sleep(3)
 						if deltH<5:
 							GAcount+=1
+						else if deltH>5 and GAcount>0:
+							GAcount-=1
 						if GAcount>5:
 							GPSlandjudge=True
 							print("GPSlandjudge")
@@ -182,6 +188,8 @@ if __name__ == "__main__":
 						time.sleep(3)
 						if deltP<0.8:
 							Pcount+=1
+						else if deltP<0.8 and Pcount>0:
+							Pcount-=1
 						if Pcount>5:
 							preslandjudge=True
 							print("preslandjudge")
