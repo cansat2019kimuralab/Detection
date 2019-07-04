@@ -109,7 +109,7 @@ if __name__ == "__main__":
 						print("presjudge")
 					else:
 						presreleasejudge=False
-				
+
 
 				if luxreleasejudge or presreleasejudge:
 					ty1=time.time()
@@ -117,45 +117,43 @@ if __name__ == "__main__":
 					print("RELEASE!")
 					bme280Data=BME280.bme280_read()	
 					gpsData = GPS.readGPS()
-					#放出判定からsleep
-					time.sleep(10)
-				
 					#ループyのタイムアウト判定
 					while(ty2-ty1<=y):
 						ty2=time.time()
-						#気圧判定(気圧の変動が小さい時フラグたてる)
+						#気圧判定
 						PRESS=bme280Data[1]       
 						deltP=PRESS
 						bme280Data=BME280.bme280_read()	#更新
 						PRESS=bme280Data[1]
 						deltP=deltP-PRESS
+						print(PRESS)
 						if deltP<0.8:
 							Pcount+=1
 						if Pcount>5:
-							preslandingjudge=True
-							print("presladingjudge")
+							preslandjudge=True
+							print("preslandjudge")
 						else:
-							preslandingjudge=False
+							preslandjudge=False
 						#GPS高度判定
 						Gheight=gpsData[4]
 						deltH=Gheight	
 						gpsData=GPS.readGPS()
 						Gheight=gpsData[4]
 						deltH=deltH-Gheight
+						print(Gheight)
 						#3秒ごとに判定
 						time.sleep(3)
-						#GPSのの変動が小さい時フラグたて
 						if deltH<5:
 							GAcount+=1
 						if GAcount>5:
-							GPSlandingjudge=True
-							print("GPSlandingjudge")
+							GPSlandjudge=True
+							print("GPSlandjudge")
 						else:
-							GPSlandingjudge=False
+							GPSlandjudge=False
 
 
 						#気圧と高度が変化していたら撮影
-						if not preslandingjudge and not GPSlandingjudge:
+						if not preslandjudge and not GPSlandjudge:
 							print("satueinow")
 							#撮影
 						#両方に変化なければ着地、ループyを抜ける
@@ -164,7 +162,7 @@ if __name__ == "__main__":
 					#ループy中でbreakが起きなければ続行、起きたら全体も抜ける
 					else:
 						continue
-					print("Landing.  {0}".format(time.time()))
+					print("THE ROVER HAS LANDED.  {0}".format(time.time()))
 					break
 				#放出されず、かつループxでタイムアウト
 				elif tx2-tx1>=x:
@@ -185,12 +183,12 @@ if __name__ == "__main__":
 						if deltP<0.8:
 							Pcount+=1
 						if Pcount>5:
-							preslandingjudge=True
+							preslandjudge=True
 							print("preslandjudge")
 						else:
-							preslandingjudge=False
+							preslandjudge=False
 						#気圧が変化しなければループzを抜ける
-						if  preslandingjudge:
+						if  preslandjudge:
 							break
 					#ループz中でbreakが起きなければ続行、起きたら全体も抜ける
 					else:
