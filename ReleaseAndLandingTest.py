@@ -194,6 +194,7 @@ if __name__ == "__main__":
 					break
 #溶断へ
 		print("outcasing")
+		close()
 	except KeyboardInterrupt:
 		close()
 		print("\r\nKeyboard Intruppted")
