@@ -109,7 +109,7 @@ if __name__ == "__main__":
 						print("presjudge")
 					else:
 						presreleasejudge=False
-
+				
 
 				if luxreleasejudge or presreleasejudge:
 					ty1=time.time()
@@ -117,16 +117,19 @@ if __name__ == "__main__":
 					print("RELEASE!")
 					bme280Data=BME280.bme280_read()	
 					gpsData = GPS.readGPS()
+					#放出判定からsleep
+					time.sleep(10)
+				
 					#ループyのタイムアウト判定
 					while(ty2-ty1<=y):
 						ty2=time.time()
-						#気圧判定
+						#気圧判定(気圧の変動が小さい時フラグたてる)
 						PRESS=bme280Data[1]       
 						deltP=PRESS
 						bme280Data=BME280.bme280_read()	#更新
 						PRESS=bme280Data[1]
 						deltP=deltP-PRESS
-						if deltP>0.8:
+						if deltP<0.8:
 							Pcount+=1
 						if Pcount>5:
 							preslandingjudge=True
@@ -141,6 +144,7 @@ if __name__ == "__main__":
 						deltH=deltH-Gheight
 						#3秒ごとに判定
 						time.sleep(3)
+						#GPSのの変動が小さい時フラグたて
 						if deltH<5:
 							GAcount+=1
 						if GAcount>5:
