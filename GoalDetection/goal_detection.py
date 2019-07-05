@@ -5,7 +5,7 @@ import math
 
 
 '''
-��数	画像(cv::Mat)
+引数	画像(cv::Mat)
 戻り値	[距離,角度]
 
 '''
@@ -23,13 +23,13 @@ def GoalDetection(img):
 	h = img_HSV[:, :, 0]
 	s = img_HSV[:, :, 1]
 
-	mask1 = np.zeros(h.shape, dtype=np.uint8)
-	mask1[((h < 10) | (h > 200)) & (s > 120)] = 255
+	mask = np.zeros(h.shape, dtype=np.uint8)
+	mask[((h < 10) | (h > 200)) & (s > 120)] = 255
 
-	#cv2.imshow('Red Zone', mask1)
+	#cv2.imshow('Red Zone', mask)
 
 	#輪郭処理
-	contours, hierarchy = cv2.findContours(mask1, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+	mask, contours, hierarchy = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
 
 	#最大面積
