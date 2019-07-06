@@ -86,6 +86,8 @@ if __name__ == "__main__":
 				
 				if luxdata[0]>luxmax or luxdata[1]>luxmax:
 					lcount+=1
+				elif luxdata[0]<luxmax and luxdata<luxmax:
+					lcount=0
 				if lcount>4:
 					luxreleasejudge=True
 					print("luxreleasejudge")
