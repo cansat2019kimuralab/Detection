@@ -24,7 +24,7 @@ bme280str = ["temp", "pres", "hum", "alt"]
 bmx055str = ["accx", "accy", "accz", "gyrx", "gyry", "gyrz", "dirx", "diry", "dirz"]
 gpsstr = ["utctime", "lat", "lon", "sHeight", "gHeight"]
 
-t = 10	#待機時間
+t = 1	#待機時間
 x = 61	#放出判定の時間
 y = 60	#着地判定の時間
 z = 120	#走行の時間
@@ -92,7 +92,7 @@ if __name__ == "__main__":
 				if lcount>4:
 					luxreleasejudge=True
 					print("luxreleasejudge")
-				else:
+				elif:
 					luxreleasejudge=False
 					lcount=0
 				#放出判定（気圧センサ）	
@@ -117,7 +117,7 @@ if __name__ == "__main__":
 						acount=0
 
 
-				if luxreleasejudge or presreleasejudge:
+				elif luxreleasejudge or presreleasejudge:
 					ty1=time.time()
 					ty2=ty1
 					print("RELEASE!")
