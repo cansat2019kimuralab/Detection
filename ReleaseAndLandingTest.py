@@ -46,9 +46,9 @@ def setup():
 	GPS.openGPS()
 	with open('log/releaseLog.txt', 'w') as f:
 		pass
-	with open('log/runningLog.txt', 'w') as f2:
+	with open('log/landingLog.txt', 'w') as f2:
 		pass
-	with open('log/landingLog.txt', 'w') as f3:
+	with open('log/runningLog.txt', 'w') as f3:
 		pass
 
 def close():
@@ -129,6 +129,7 @@ if __name__ == "__main__":
 					bme280Data=BME280.bme280_read()	
 					gpsData = GPS.readGPS()
 					#ループyのタイムアウト判定
+					with open('log/runningLog.txt', 'w') as f2:
 					while(ty2-ty1<=y):
 						ty2=time.time()
 						#気圧判定
@@ -137,6 +138,7 @@ if __name__ == "__main__":
 						bme280Data=BME280.bme280_read()	#更新
 						PRESS=bme280Data[1]
 						deltP=deltP-PRESS
+						f.write("NEW: "+str(deltP)+"    old:"+str(PRESS)+ "\t")
 						print(PRESS)
 						if abs(deltP)<deltPmax:
 							Pcount+=1
