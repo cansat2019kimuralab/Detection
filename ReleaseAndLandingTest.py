@@ -67,7 +67,7 @@ if __name__ == "__main__":
 		GAcount=0
 		deltAmax=0.1
 		luxmax=300
-		pressmax=0.1#気圧変化
+		pressmax=0.1 #気圧変化
 		tx1 = time.time()
 		tx2 = tx1
 
@@ -138,7 +138,7 @@ if __name__ == "__main__":
 						if Pcount>5:
 							preslandjudge=True
 							print("preslandjudge")
-						elif abs(deltP)>pressmax
+						elif abs(deltP)>pressmax:
 							preslandjudge=False
 							Pcount=0
 						#GPS高度判定
