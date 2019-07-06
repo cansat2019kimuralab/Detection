@@ -65,6 +65,7 @@ if __name__ == "__main__":
 		acount=0
 		Pcount=0
 		GAcount=0
+		luxmax=300
 		tx1 = time.time()
 		tx2 = tx1
 
@@ -83,7 +84,7 @@ if __name__ == "__main__":
 				f.write(str(luxdata[0])+"	"+str(luxdata[1])+ "\t")
 				f.write("\n")
 				
-				if luxdata[0]>300 or luxdata[1]>300:
+				if luxdata[0]>luxmax or luxdata[1]>luxmax:
 					lcount+=1
 				if lcount>4:
 					luxreleasejudge=True
@@ -131,8 +132,8 @@ if __name__ == "__main__":
 						print(PRESS)
 						if deltP<0.8:
 							Pcount+=1
-						else if deltP>0.8 and Pcount>0:
-							Pcount-=1
+						elif deltP>0.8:
+							Pcount=0
 						if Pcount>5:
 							preslandjudge=True
 							print("preslandjudge")
@@ -149,8 +150,8 @@ if __name__ == "__main__":
 						time.sleep(3)
 						if deltH<5:
 							GAcount+=1
-						else if deltH>5 and GAcount>0:
-							GAcount-=1
+						elif deltH>5 :
+							GAcount=0
 						if GAcount>5:
 							GPSlandjudge=True
 							print("GPSlandjudge")
@@ -188,8 +189,8 @@ if __name__ == "__main__":
 						time.sleep(3)
 						if deltP<0.8:
 							Pcount+=1
-						else if deltP<0.8 and Pcount>0:
-							Pcount-=1
+						elif deltP<0.8:
+							Pcount=0
 						if Pcount>5:
 							preslandjudge=True
 							print("preslandjudge")
