@@ -66,6 +66,10 @@ if __name__ == "__main__":
 		Pcount=0
 		GAcount=0
 		luxmax=300
+		deltAmax=0.1
+		deltPmax=0.1
+		deltHmax=5
+		
 		tx1 = time.time()
 		tx2 = tx1
 
@@ -83,6 +87,8 @@ if __name__ == "__main__":
 				print("lux1: "+str(luxdata[0])+" "+"lux2: "+str(luxdata[1]))
 				f.write(str(luxdata[0])+"	"+str(luxdata[1])+ "\t")
 				f.write("\n")
+				print(lcount)
+				print(acount)
 				
 				if luxdata[0]>luxmax or luxdata[1]>luxmax:
 					lcount+=1
@@ -105,9 +111,9 @@ if __name__ == "__main__":
 					time.sleep(3)
 					#3秒前の値と比較
 					#高度差が式一以上でacout+=1
-					if deltA>2:
+					if deltA>deltAmax:
 						acount+=1
-					elif deltA<2:
+					elif deltA<deltAmax:
 						acount=0
 					if acount>3:
 						presreleasejudge=True
@@ -132,9 +138,9 @@ if __name__ == "__main__":
 						PRESS=bme280Data[1]
 						deltP=deltP-PRESS
 						print(PRESS)
-						if deltP<0.8:
+						if abs(deltP)<deltPmax:
 							Pcount+=1
-						elif deltP>0.8:
+						elif abs(deltP)>deltPmax:
 							Pcount=0
 						if Pcount>5:
 							preslandjudge=True
@@ -150,9 +156,9 @@ if __name__ == "__main__":
 						print(Gheight)
 						#3秒ごとに判定
 						time.sleep(3)
-						if deltH<5:
+						if abs(deltH)<deltHmax:
 							GAcount+=1
-						elif deltH>5 :
+						elif abs(deltH)>deltHmax :
 							GAcount=0
 						if GAcount>5:
 							GPSlandjudge=True
@@ -189,9 +195,9 @@ if __name__ == "__main__":
 						print(PRESS)
 						#3秒ごとに判定.
 						time.sleep(3)
-						if deltP<0.8:
+						if abs(deltP)<deltPmax:
 							Pcount+=1
-						elif deltP<0.8:
+						elif abs(deltP)<deltPmax:
 							Pcount=0
 						if Pcount>5:
 							preslandjudge=True
