@@ -24,7 +24,7 @@ bme280str = ["temp", "pres", "hum", "alt"]
 bmx055str = ["accx", "accy", "accz", "gyrx", "gyry", "gyrz", "dirx", "diry", "dirz"]
 gpsstr = ["utctime", "lat", "lon", "sHeight", "gHeight"]
 
-t = 10	#待機時間
+t = 1	#待機時間
 x = 61	#放出判定の時間
 y = 60	#着地判定の時間
 z = 120	#走行の時間
@@ -86,7 +86,7 @@ if __name__ == "__main__":
 				
 				if luxdata[0]>luxmax or luxdata[1]>luxmax:
 					lcount+=1
-				elif luxdata[0]<luxmax and luxdata<luxmax:
+				elif luxdata[0]<luxmax and luxdata[1]<luxmax:
 					lcount=0
 				if lcount>4:
 					luxreleasejudge=True
