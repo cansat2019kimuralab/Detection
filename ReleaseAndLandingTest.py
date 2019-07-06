@@ -193,12 +193,13 @@ if __name__ == "__main__":
 						if Pcount>5:
 							preslandjudge=True
 							print("preslandjudge")
+						elif  preslandjudge:
+							break
 						else:
 							preslandjudge=False
 							Pcount=0
 						#気圧が変化しなければループzを抜ける
-						if  preslandjudge:
-							break
+						
 					#ループz中でbreakが起きなければ続行、起きたら全体も抜ける
 					else:
 						continue
