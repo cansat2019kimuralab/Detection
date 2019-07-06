@@ -130,52 +130,52 @@ if __name__ == "__main__":
 					gpsData = GPS.readGPS()
 					#ループyのタイムアウト判定
 					with open('log/runningLog.txt', 'w') as f2:
-					while(ty2-ty1<=y):
-						ty2=time.time()
-						#気圧判定
-						PRESS=bme280Data[1]       
-						deltP=PRESS
-						bme280Data=BME280.bme280_read()	#更新
-						PRESS=bme280Data[1]
-						deltP=deltP-PRESS
-						f.write("NEW: "+str(deltP)+"    old:"+str(PRESS)+ "\t")
-						print(PRESS)
-						if abs(deltP)<deltPmax:
-							Pcount+=1
-						elif abs(deltP)>deltPmax:
-							Pcount=0
-						if Pcount>5:
-							preslandjudge=True
-							print("preslandjudge")
-						else:
-							preslandjudge=False
-						#GPS高度判定
-						Gheight=gpsData[4]
-						deltH=Gheight	
-						gpsData=GPS.readGPS()
-						Gheight=gpsData[4]
-						deltH=deltH-Gheight
-						print(Gheight)
-						#3秒ごとに判定
-						time.sleep(3)
-						if abs(deltH)<deltHmax:
-							GAcount+=1
-						elif abs(deltH)>deltHmax :
-							GAcount=0
-						if GAcount>5:
-							GPSlandjudge=True
-							print("GPSlandjudge")
-						else:
-							GPSlandjudge=False
+						while(ty2-ty1<=y):
+							ty2=time.time()
+							#気圧判定
+							PRESS=bme280Data[1]       
+							deltP=PRESS
+							bme280Data=BME280.bme280_read()	#更新
+							PRESS=bme280Data[1]
+							deltP=deltP-PRESS
+							f.write("NEW: "+str(deltP)+"    old:"+str(PRESS)+ "\t")
+							print(PRESS)
+							if abs(deltP)<deltPmax:
+								Pcount+=1
+							elif abs(deltP)>deltPmax:
+								Pcount=0
+							if Pcount>5:
+								preslandjudge=True
+								print("preslandjudge")
+							else:
+								preslandjudge=False
+							#GPS高度判定
+							Gheight=gpsData[4]
+							deltH=Gheight	
+							gpsData=GPS.readGPS()
+							Gheight=gpsData[4]
+							deltH=deltH-Gheight
+							print(Gheight)
+							#3秒ごとに判定
+							time.sleep(3)
+							if abs(deltH)<deltHmax:
+								GAcount+=1
+							elif abs(deltH)>deltHmax :
+								GAcount=0
+							if GAcount>5:
+								GPSlandjudge=True
+								print("GPSlandjudge")
+							else:
+								GPSlandjudge=False
 
 
-						#気圧と高度が変化していたら撮影
-						if not preslandjudge and not GPSlandjudge:
-							print("satueinow")
-							#撮影
-						#両方に変化なければ着地、ループyを抜ける
-						else:
-							break
+							#気圧と高度が変化していたら撮影
+							if not preslandjudge and not GPSlandjudge:
+								print("satueinow")
+								#撮影
+							#両方に変化なければ着地、ループyを抜ける
+							else:
+								break
 					#ループy中でbreakが起きなければ続行、起きたら全体も抜ける
 					else:
 						continue
