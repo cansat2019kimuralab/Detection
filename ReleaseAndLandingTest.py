@@ -88,11 +88,11 @@ if __name__ == "__main__":
 				
 				if luxdata[0]>luxmax or luxdata[1]>luxmax:
 					lcount+=1
-
+					print(lcount)
 				if lcount>4:
 					luxreleasejudge=True
 					print("luxreleasejudge")
-				elif:
+				elif luxdata[0]<luxmax and luxdata[1]<luxmax:
 					luxreleasejudge=False
 					lcount=0
 				#放出判定（気圧センサ）	
@@ -138,7 +138,7 @@ if __name__ == "__main__":
 						if Pcount>5:
 							preslandjudge=True
 							print("preslandjudge")
-						else:
+						elif abs(deltP)>pressmax
 							preslandjudge=False
 							Pcount=0
 						#GPS高度判定
