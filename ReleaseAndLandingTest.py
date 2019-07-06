@@ -67,7 +67,7 @@ if __name__ == "__main__":
 		GAcount=0
 		deltAmax=0.1
 		luxmax=300
-		pressmax=0.05
+		pressmax=0.05#気圧変化
 		tx1 = time.time()
 		tx2 = tx1
 
@@ -92,10 +92,9 @@ if __name__ == "__main__":
 				if lcount>4:
 					luxreleasejudge=True
 					print("luxreleasejudge")
-				if luxdata[0]<luxmax and luxdata[1]<luxmax:
-					lcount=0
 				else:
 					luxreleasejudge=False
+					lcount=0
 				#放出判定（気圧センサ）	
 					PRESS=bme280Data[1]       
 					deltA=PRESS
@@ -109,14 +108,13 @@ if __name__ == "__main__":
 					#3秒前の値と比較
 					#気圧差が閾値以上でacout+=1
 					if deltA>deltAmax:
-						acount+=1
-					else if deltA<deltAmax :
-						acount=0
+						acount+=1			
 					if acount>5:
 						presreleasejudge=True
 						print("presjudge")
 					else:
 						presreleasejudge=False
+						acount=0
 
 
 				if luxreleasejudge or presreleasejudge:
@@ -137,13 +135,12 @@ if __name__ == "__main__":
 						print(PRESS)
 						if abs(deltP)<pressmax:
 							Pcount+=1
-						else if abs(deltP)>pressmax:
-							Pcount=0
 						if Pcount>5:
 							preslandjudge=True
 							print("preslandjudge")
 						else:
 							preslandjudge=False
+							Pcount=0
 						#GPS高度判定
 						Gheight=gpsData[4]
 						deltH=Gheight	
@@ -155,13 +152,12 @@ if __name__ == "__main__":
 						time.sleep(3)
 						if abs(deltH)<5:
 							GAcount+=1
-						else if abs(deltH)>5:
-							GAcount=0
 						if GAcount>5:
 							GPSlandjudge=True
 							print("GPSlandjudge")
 						else:
 							GPSlandjudge=False
+							GAcount=0
 
 
 						#気圧と高度が変化していたら撮影
@@ -194,13 +190,12 @@ if __name__ == "__main__":
 						time.sleep(3)
 						if abs(deltP)<pressmax:
 							Pcount+=1
-						else if abs(deltP)<pressmax:
-							Pcount=0
 						if Pcount>5:
 							preslandjudge=True
 							print("preslandjudge")
 						else:
 							preslandjudge=False
+							Pcount=0
 						#気圧が変化しなければループzを抜ける
 						if  preslandjudge:
 							break
