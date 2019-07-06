@@ -65,6 +65,9 @@ if __name__ == "__main__":
 		acount=0
 		Pcount=0
 		GAcount=0
+		deltAmax=0.1
+		luxmax=300
+		pressmax=0.05
 		tx1 = time.time()
 		tx2 = tx1
 
@@ -83,11 +86,14 @@ if __name__ == "__main__":
 				f.write(str(luxdata[0])+"	"+str(luxdata[1])+ "\t")
 				f.write("\n")
 				
-				if luxdata[0]>300 or luxdata[1]>300:
+				if luxdata[0]>luxmax or luxdata[1]>luxmax:
 					lcount+=1
+
 				if lcount>4:
 					luxreleasejudge=True
 					print("luxreleasejudge")
+				if luxdata[0]<luxmax and luxdata[1]<luxmax:
+					lcount=0
 				else:
 					luxreleasejudge=False
 				#放出判定（気圧センサ）	
@@ -101,12 +107,12 @@ if __name__ == "__main__":
 					print(str(deltA))
 					time.sleep(3)
 					#3秒前の値と比較
-					#高度差が式一以上でacout+=1
-					if deltA>2:
+					#気圧差が閾値以上でacout+=1
+					if deltA>deltAmax:
 						acount+=1
-					else if deltA<2 and acount>0:
-						acount-=1
-					if acount>3:
+					else if deltA<deltAmax :
+						acount=0
+					if acount>5:
 						presreleasejudge=True
 						print("presjudge")
 					else:
@@ -129,10 +135,10 @@ if __name__ == "__main__":
 						PRESS=bme280Data[1]
 						deltP=deltP-PRESS
 						print(PRESS)
-						if deltP<0.8:
+						if abs(deltP)<pressmax:
 							Pcount+=1
-						else if deltP>0.8 and Pcount>0:
-							Pcount-=1
+						else if abs(deltP)>pressmax:
+							Pcount=0
 						if Pcount>5:
 							preslandjudge=True
 							print("preslandjudge")
@@ -147,10 +153,10 @@ if __name__ == "__main__":
 						print(Gheight)
 						#3秒ごとに判定
 						time.sleep(3)
-						if deltH<5:
+						if abs(deltH)<5:
 							GAcount+=1
-						else if deltH>5 and GAcount>0:
-							GAcount-=1
+						else if abs(deltH)>5:
+							GAcount=0
 						if GAcount>5:
 							GPSlandjudge=True
 							print("GPSlandjudge")
@@ -186,10 +192,10 @@ if __name__ == "__main__":
 						print(PRESS)
 						#3秒ごとに判定.
 						time.sleep(3)
-						if deltP<0.8:
+						if abs(deltP)<pressmax:
 							Pcount+=1
-						else if deltP<0.8 and Pcount>0:
-							Pcount-=1
+						else if abs(deltP)<pressmax:
+							Pcount=0
 						if Pcount>5:
 							preslandjudge=True
 							print("preslandjudge")
