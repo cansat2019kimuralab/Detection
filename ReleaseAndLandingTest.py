@@ -24,7 +24,7 @@ bme280str = ["temp", "pres", "hum", "alt"]
 bmx055str = ["accx", "accy", "accz", "gyrx", "gyry", "gyrz", "dirx", "diry", "dirz"]
 gpsstr = ["utctime", "lat", "lon", "sHeight", "gHeight"]
 
-t = 1	#待機時間
+t = 10	#待機時間
 x = 61	#放出判定の時間
 y = 60	#着地判定の時間
 z = 120	#走行の時間
@@ -65,9 +65,6 @@ if __name__ == "__main__":
 		acount=0
 		Pcount=0
 		GAcount=0
-		deltAmax=0.1
-		luxmax=300
-		pressmax=0.1 #気圧変化
 		tx1 = time.time()
 		tx2 = tx1
 
@@ -86,15 +83,13 @@ if __name__ == "__main__":
 				f.write(str(luxdata[0])+"	"+str(luxdata[1])+ "\t")
 				f.write("\n")
 				
-				if luxdata[0]>luxmax or luxdata[1]>luxmax:
+				if luxdata[0]>300 or luxdata[1]>300:
 					lcount+=1
-					print(lcount)
 				if lcount>4:
 					luxreleasejudge=True
 					print("luxreleasejudge")
-				elif luxdata[0]<luxmax and luxdata[1]<luxmax:
+				else:
 					luxreleasejudge=False
-					lcount=0
 				#放出判定（気圧センサ）	
 					PRESS=bme280Data[1]       
 					deltA=PRESS
@@ -106,18 +101,19 @@ if __name__ == "__main__":
 					print(str(deltA))
 					time.sleep(3)
 					#3秒前の値と比較
-					#気圧差が閾値以上でacout+=1
-					if deltA>deltAmax:
-						acount+=1			
-					if acount>5:
+					#高度差が式一以上でacout+=1
+					if deltA>2:
+						acount+=1
+					else if deltA<2 and acount>0:
+						acount-=1
+					if acount>3:
 						presreleasejudge=True
 						print("presjudge")
 					else:
 						presreleasejudge=False
-						acount=0
 
 
-				elif luxreleasejudge or presreleasejudge:
+				if luxreleasejudge or presreleasejudge:
 					ty1=time.time()
 					ty2=ty1
 					print("RELEASE!")
@@ -133,14 +129,15 @@ if __name__ == "__main__":
 						PRESS=bme280Data[1]
 						deltP=deltP-PRESS
 						print(PRESS)
-						if abs(deltP)<pressmax:
+						if deltP<0.8:
 							Pcount+=1
+						else if deltP>0.8 and Pcount>0:
+							Pcount-=1
 						if Pcount>5:
 							preslandjudge=True
 							print("preslandjudge")
-						elif abs(deltP)>pressmax:
+						else:
 							preslandjudge=False
-							Pcount=0
 						#GPS高度判定
 						Gheight=gpsData[4]
 						deltH=Gheight	
@@ -150,14 +147,15 @@ if __name__ == "__main__":
 						print(Gheight)
 						#3秒ごとに判定
 						time.sleep(3)
-						if abs(deltH)<5:
+						if deltH<5:
 							GAcount+=1
+						else if deltH>5 and GAcount>0:
+							GAcount-=1
 						if GAcount>5:
 							GPSlandjudge=True
 							print("GPSlandjudge")
 						else:
 							GPSlandjudge=False
-							GAcount=0
 
 
 						#気圧と高度が変化していたら撮影
@@ -188,18 +186,18 @@ if __name__ == "__main__":
 						print(PRESS)
 						#3秒ごとに判定.
 						time.sleep(3)
-						if abs(deltP)<pressmax:
+						if deltP<0.8:
 							Pcount+=1
+						else if deltP<0.8 and Pcount>0:
+							Pcount-=1
 						if Pcount>5:
 							preslandjudge=True
 							print("preslandjudge")
-						elif  preslandjudge:
-							break
 						else:
 							preslandjudge=False
-							Pcount=0
 						#気圧が変化しなければループzを抜ける
-						
+						if  preslandjudge:
+							break
 					#ループz中でbreakが起きなければ続行、起きたら全体も抜ける
 					else:
 						continue
@@ -215,4 +213,3 @@ if __name__ == "__main__":
 		IM920.Send("Error Occured")
 		IM920.Send("Program Stopped")
 		print(e.message)
-		
