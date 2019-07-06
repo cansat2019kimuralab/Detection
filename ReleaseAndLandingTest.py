@@ -105,8 +105,8 @@ if __name__ == "__main__":
 					#高度差が式一以上でacout+=1
 					if deltA>2:
 						acount+=1
-					else if deltA<2 and acount>0:
-						acount-=1
+					elif deltA<2:
+						acount=0
 					if acount>3:
 						presreleasejudge=True
 						print("presjudge")
