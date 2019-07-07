@@ -26,7 +26,7 @@ gpsstr = ["utctime", "lat", "lon", "sHeight", "gHeight"]
 
 t = 1	#待機時間
 x = 61	#放出判定の時間
-y = 60	#着地判定の時間
+y = 120	#着地判定の時間
 z = 120	#走行の時間
 
 
