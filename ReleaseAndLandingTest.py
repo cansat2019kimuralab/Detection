@@ -60,7 +60,7 @@ if __name__ == "__main__":
 	try:
 		setup()
 		time.sleep(t)
-		bme280Data=BME280.bme280_read()	
+		bme280Data=BME280.bme280_read()
 		lcount=0
 		acount=0
 		Pcount=0
@@ -75,9 +75,10 @@ if __name__ == "__main__":
 
 		#溶断まで
 		print("Releasing Judgement Program Start  {0}".format(time.time()))
-		#ループx
+		
 		with open('log/releaseLog.txt', 'a') as f:
 			f.write("\n")
+			#ループx
 			while(1):
 				
 				#tx2を更新
@@ -100,8 +101,8 @@ if __name__ == "__main__":
 					print("luxreleasejudge")
 				else:
 					luxreleasejudge=False
-				#放出判定（気圧センサ）	
-					PRESS=bme280Data[1]       
+				#放出判定（気圧センサ）
+					PRESS=bme280Data[1]
 					deltA=PRESS
 					bme280Data=BME280.bme280_read()	#更新
 					PRESS=bme280Data[1]
@@ -130,7 +131,7 @@ if __name__ == "__main__":
 					ty2=ty1
 					print("RELEASE!")
 					f.write("release")
-					bme280Data=BME280.bme280_read()	
+					bme280Data=BME280.bme280_read()
 					gpsData = GPS.readGPS()
 					#ループyのタイムアウト判定
 					with open('log/landingLog.txt', 'a') as f2:
@@ -138,7 +139,7 @@ if __name__ == "__main__":
 						while(ty2-ty1<=y):
 							ty2=time.time()
 							#気圧判定
-							PRESS=bme280Data[1]       
+							PRESS=bme280Data[1]
 							deltP=PRESS
 							bme280Data=BME280.bme280_read()	#更新
 							PRESS=bme280Data[1]
@@ -159,7 +160,7 @@ if __name__ == "__main__":
 								
 							#GPS高度判定
 							Gheight=gpsData[4]
-							deltH=Gheight	
+							deltH=Gheight
 							gpsData=GPS.readGPS()
 							Gheight=gpsData[4]
 							deltH=deltH-Gheight
@@ -188,7 +189,9 @@ if __name__ == "__main__":
 								print("Landingjudgement now")
 					#ループy中でbreakが起きなければ続行、起きたら全体も抜ける
 						else:
-							continue
+							print("THE ROVER HAS LANDED.  {0}".format(time.time()))
+							f2.write("land")
+							break
 						print("THE ROVER HAS LANDED.  {0}".format(time.time()))
 						f2.write("land")
 						break
@@ -200,7 +203,7 @@ if __name__ == "__main__":
 					#ループzのタイムアウト判定
 					while(tz2-tz1<=z):
 						tz2=time.time()
-						PRESS=bme280Data[1]       
+						PRESS=bme280Data[1]
 						deltP=PRESS
 						bme280Data=BME280.bme280_read()	#更新
 						PRESS=bme280Data[1]
@@ -222,7 +225,7 @@ if __name__ == "__main__":
 							break
 					#ループz中でbreakが起きなければ続行、起きたら全体も抜ける
 					else:
-						continue
+						break
 					break
 #溶断へ
 		print("outcasing")
