@@ -194,7 +194,7 @@ if __name__ == "__main__":
 							print("THE ROVER HAS LANDED.  {0}".format(time.time()))
 							f2.write("land")
 							break
-						print("THE ROVER HAS LANDED.  {0}".format(time.time()))
+						print("THE ROVER HAS LANDED(timeout).  {0}".format(time.time()))
 						f2.write("land")
 						break
 				#放出されず、かつループxでタイムアウト
