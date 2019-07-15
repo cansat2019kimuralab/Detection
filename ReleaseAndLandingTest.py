@@ -131,6 +131,7 @@ if __name__ == "__main__":
 					ty2=ty1
 					print("RELEASE!")
 					f.write("release")
+					pi.write(22,0)
 					bme280Data=BME280.bme280_read()
 					gpsData = GPS.readGPS()
 					#ループyのタイムアウト判定
