@@ -138,6 +138,7 @@ if __name__ == "__main__":
 					with open('log/landingLog.txt', 'a') as f2:
 						f.write("\n")
 						while(ty2-ty1<=y):
+							print(str(ty2-ty1))
 							ty2=time.time()
 							#気圧判定
 							PRESS=bme280Data[1]
