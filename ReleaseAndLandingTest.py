@@ -191,10 +191,10 @@ if __name__ == "__main__":
 								print("Landingjudgement now")
 					#ループy中でbreakが起きなければ続行、起きたら全体も抜ける
 						else:
-							print("THE ROVER HAS LANDED.  {0}".format(time.time()))
+							print("THE ROVER HAS LANDED(timeout y).  {0}".format(time.time()))
 							f2.write("land")
 							break
-						print("THE ROVER HAS LANDED(timeout).  {0}".format(time.time()))
+						print("THE ROVER HAS LANDED.  {0}".format(time.time()))
 						f2.write("land")
 						break
 				#放出されず、かつループxでタイムアウト
