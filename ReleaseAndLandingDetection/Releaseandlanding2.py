@@ -98,4 +98,10 @@ if __name__ == "__main__":
                     print("landjudgementnow")
                 time.sleep(3)
             print("THE ROVER HAS LANDED")
+    except KeyboardInterrupt:
+            close()
+            print("Keyboard Interrupt")
+    except Exception as e:
+            close()
+            print(e.message)
 
