@@ -33,7 +33,7 @@ def luxjudge():
 		print("luxreleasejudge")
 	else:
 		luxjudge=0
-	print(luxdata[0]+":"luxdata[1])
+	print(str(luxdata[0])+":"+str(luxdata[1])
 	return luxjudge
 
 def pressjudge():
