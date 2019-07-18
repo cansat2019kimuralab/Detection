@@ -21,7 +21,7 @@ luxdata=[]
 lcount=0
 luxmax=200
 deltAmax=0.3
-
+bme280Data=BME280.bme280_read()
 def luxjudge():
 	luxdata=TSL2561.readLux()
 	global lcount
