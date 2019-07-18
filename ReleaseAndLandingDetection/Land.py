@@ -19,7 +19,7 @@ import Motor
 import TSL2561
 deltPmax=0.1
 deltHmax=5
-Pcount=o
+Pcount=0
 def pressjudge():
 	global Pcount
 	bme280Data=BME280.bme280_read()#?
