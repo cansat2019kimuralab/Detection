@@ -62,42 +62,42 @@ def close():
 
 if __name__ == "__main__":
 	try:
-        # ------------------- Setup Fhase ------------------- --#
-        print("Program Start  {0}".format(time.time()))
-            setup()
-            time.sleep(t_setup)
-            bme280Data=BME280.bme280_read()
+		# ------------------- Setup Fhase ------------------- --#
+		print("Program Start  {0}".format(time.time()))
+		    setup()
+		    time.sleep(t_setup)
+		    bme280Data=BME280.bme280_read()
 
 
-            tx1 = time.time()
-            tx2 = tx1
-        # ------------------- Release Fhase ------------------- #
-            print("Releasing Judgement Program Start  {0}".format(time.time()))
-            #loopx
-            while (tx2-tx1<=x):
-                luxjudge=Release.luxjudge()
-                pressjudge=Release.pressjudge()
-                if luxjudge==1 or presjudge==1:
-                    break
-                else:
-                    print("taking photo")
-                time.sleep(2)
-            print("THE ROVER HAS RELEASED")
-            pi.write(22,1)
-        # ------------------- Landing Fhase ------------------- #
-            ty1=time.time()
-            ty2=ty1
-            while(ty2-ty1<=y)
-                pressjudge=Land.pressjudge()
-                gpsjudge=Land.gpsjudge()
-                if pressjudge ==1 and gpsjudge ==1:
-                    break
-                elif pressjudge==0 and gpsjudge==0:
-                    print("taking photo")
-                elif pressjudge==1 or gpsjudge==1:
-                    print("landjudgementnow")
-                time.sleep(3)
-            print("THE ROVER HAS LANDED")
+		    tx1 = time.time()
+		    tx2 = tx1
+		# ------------------- Release Fhase ------------------- #
+		    print("Releasing Judgement Program Start  {0}".format(time.time()))
+		    #loopx
+		    while (tx2-tx1<=x):
+			luxjudge=Release.luxjudge()
+			pressjudge=Release.pressjudge()
+			if luxjudge==1 or presjudge==1:
+			    break
+			else:
+			    print("taking photo")
+			time.sleep(2)
+		    print("THE ROVER HAS RELEASED")
+		    pi.write(22,1)
+		# ------------------- Landing Fhase ------------------- #
+		    ty1=time.time()
+		    ty2=ty1
+		    while(ty2-ty1<=y)
+			pressjudge=Land.pressjudge()
+			gpsjudge=Land.gpsjudge()
+			if pressjudge ==1 and gpsjudge ==1:
+			    break
+			elif pressjudge==0 and gpsjudge==0:
+			    print("taking photo")
+			elif pressjudge==1 or gpsjudge==1:
+			    print("landjudgementnow")
+			time.sleep(3)
+		    print("THE ROVER HAS LANDED")
     except KeyboardInterrupt:
             close()
             print("Keyboard Interrupt")
