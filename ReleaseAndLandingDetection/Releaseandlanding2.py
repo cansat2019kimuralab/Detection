@@ -17,7 +17,8 @@ import BMX055
 import BME280
 import Capture
 import TSL2561
-
+import Release
+import Land
 luxstr = ["lux1", "lux2"]																#variable to show lux returned variables
 bme280str = ["temp", "pres", "hum", "alt"]												#variable to show bme280 returned variables
 bmx055str = ["accx", "accy", "accz", "gyrx", "gyry", "gyrz", "dirx", "diry", "dirz"]	#variable to show bmx055 returned variables
