@@ -18,7 +18,7 @@ import Melting
 import Motor
 import TSL2561
 luxdata=[]
-lcount=0
+#lcount=0
 luxmax=200
 deltAmax=0.3
 
@@ -33,6 +33,7 @@ def luxjudge():
 		print("luxreleasejudge")
 	else:
 		luxjudge=0
+	print(luxdata[0]+":"luxdata[1])
 	return luxjudge
 
 def pressjudge():
