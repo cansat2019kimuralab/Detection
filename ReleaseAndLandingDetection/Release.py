@@ -55,4 +55,5 @@ def pressjudge():
 		print("presjudge")
 	else:
 		pressjudge=0
+	print(str(deltA))
 	return pressjudge
