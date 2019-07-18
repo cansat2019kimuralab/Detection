@@ -89,6 +89,7 @@ if __name__ == "__main__":
 		# ------------------- Landing Fhase ------------------- #
 		ty1=time.time()
 		ty2=ty1
+		gpsData = GPS.readGPS()
 		while(ty2-ty1<=y):
 			pressjudge=Land.pressjudge()
 			gpsjudge=Land.gpsjudge()
