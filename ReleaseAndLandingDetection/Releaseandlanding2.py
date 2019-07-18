@@ -83,6 +83,7 @@ if __name__ == "__main__":
 			else:
 		   		print("taking photo")
 			time.sleep(2)
+			tx2=time.time()
 		print("THE ROVER HAS RELEASED")
 		pi.write(22,1)
 		# ------------------- Landing Fhase ------------------- #
@@ -98,6 +99,7 @@ if __name__ == "__main__":
 			elif pressjudge==1 or gpsjudge==1:
 			    print("landjudgementnow")
 			time.sleep(3)
+			ty2=time.time()
 			print("THE ROVER HAS LANDED")
 	except KeyboardInterrupt:
 			close()
