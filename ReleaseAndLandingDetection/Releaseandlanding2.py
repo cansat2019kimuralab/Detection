@@ -62,7 +62,7 @@ def close():
 
 if __name__ == "__main__":
 	try:
-        # ------------------- Setup Fhase ------------------- #
+        # ------------------- Setup Fhase ------------------- --#
         print("Program Start  {0}".format(time.time()))
             setup()
             time.sleep(t_setup)
