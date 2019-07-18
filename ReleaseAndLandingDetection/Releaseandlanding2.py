@@ -70,7 +70,7 @@ if __name__ == "__main__":
 
 
 		tx1 = time.time()
-	    tx2 = tx1
+		tx2 = tx1
 		# ------------------- Release Fhase ------------------- #
 		print("Releasing Judgement Program Start  {0}".format(time.time()))
 		#loopx
@@ -78,16 +78,16 @@ if __name__ == "__main__":
 			luxjudge=Release.luxjudge()
 			pressjudge=Release.pressjudge()
 			if luxjudge==1 or presjudge==1:
-		    	break
+				break
 			else:
 		   		print("taking photo")
 			time.sleep(2)
-	    print("THE ROVER HAS RELEASED")
-	    pi.write(22,1)
+		print("THE ROVER HAS RELEASED")
+		pi.write(22,1)
 		# ------------------- Landing Fhase ------------------- #
 		ty1=time.time()
 		ty2=ty1
-		while(ty2-ty1<=y)
+		while(ty2-ty1<=y):
 			pressjudge=Land.pressjudge()
 			gpsjudge=Land.gpsjudge()
 			if pressjudge ==1 and gpsjudge ==1:
@@ -97,11 +97,11 @@ if __name__ == "__main__":
 			elif pressjudge==1 or gpsjudge==1:
 			    print("landjudgementnow")
 			time.sleep(3)
-		    print("THE ROVER HAS LANDED")
-    except KeyboardInterrupt:
-            close()
-            print("Keyboard Interrupt")
-    except Exception as e:
-            close()
-            print(e.message)
+			print("THE ROVER HAS LANDED")
+	except KeyboardInterrupt:
+			close()
+			print("Keyboard Interrupt")
+	except Exception as e:
+			close()
+			print(e.message)
 
