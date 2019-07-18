@@ -37,7 +37,7 @@ def pressjudge():
 		print("preslandjudge")
 	else:
 		preslandjudge=0
-	print(str(deltA))
+	print(str(deltP))
 	return preslandjudge
 
 def gpsjudge():
