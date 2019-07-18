@@ -20,6 +20,7 @@ import TSL2561
 deltPmax=0.1
 deltHmax=5
 def pressjudge():
+	bme280Data=BME280.bme280_read()#?
 	PRESS=bme280Data[1]
 	deltP=PRESS
 	bme280Data=BME280.bme280_read()	#更新
@@ -34,6 +35,7 @@ def pressjudge():
 		print("preslandjudge")
 	else:
 		preslandjudge=0
+	print(str(deltA))
 	return preslandjudge
 
 def gpsjudge():
