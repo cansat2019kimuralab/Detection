@@ -20,12 +20,12 @@ import TSL2561
 deltPmax=0.1
 deltHmax=5
 def pressjudge():
-    PRESS=bme280Data[1]
+	PRESS=bme280Data[1]
 	deltP=PRESS
-    bme280Data=BME280.bme280_read()	#更新
+	bme280Data=BME280.bme280_read()	#更新
 	PRESS=bme280Data[1]
 	deltP=deltP-PRESS
-    if abs(deltP)<deltPmax:
+	if abs(deltP)<deltPmax:
 		Pcount+=1
 	elif abs(deltP)>deltPmax:
 		Pcount=0
@@ -34,10 +34,10 @@ def pressjudge():
 		print("preslandjudge")
 	else:
 		preslandjudge=0
-    return preslandjudge
+	return preslandjudge
 
 def gpsjudge():
-    Gheight=gpsData[4]
+	Gheight=gpsData[4]
 	deltH=Gheight
 	gpsData=GPS.readGPS()
 	Gheight=gpsData[4]
@@ -54,4 +54,4 @@ def gpsjudge():
 		print("GPSlandjudge")
 	else:
 		gpsjudge=0
-    return gpsjudge
+	return gpsjudge

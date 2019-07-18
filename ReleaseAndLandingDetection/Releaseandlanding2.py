@@ -48,7 +48,7 @@ def setup():
 	time.sleep(1)
 	BME280.bme280_setup()
 	BME280.bme280_calib_param()
-	BMX055.bmx055_setup()
+#	BMX055.bmx055_setup()
 	GPS.openGPS()
 	with open('log/releaseLog.txt', 'a') as f:
 		pass

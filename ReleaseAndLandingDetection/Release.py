@@ -23,8 +23,8 @@ luxmax=200
 deltAmax=0.3
 
 def luxjudge():
-    luxdata=TSL2561.readLux()
-    if luxdata[0]>luxmax or luxdata[1]>luxmax:
+	luxdata=TSL2561.readLux()
+	if luxdata[0]>luxmax or luxdata[1]>luxmax:
 		lcount+=1
 	elif luxdata[0]<luxmax and luxdata[1]<luxmax:
 		lcount=0
@@ -33,7 +33,7 @@ def luxjudge():
 		print("luxreleasejudge")
 	else:
 		luxjudge=0
-    return luxjudge
+	return luxjudge
 
 def pressjudge():
 	PRESS=bme280Data[1]
@@ -41,13 +41,13 @@ def pressjudge():
 	bme280Data=BME280.bme280_read()	#更新
 	PRESS=bme280Data[1]
 	deltA=PRESS-deltA
-    if deltA>deltAmax:
-        acount+=1
+	if deltA>deltAmax:
+		acount+=1
 	elif deltA<deltAmax:
 		acount=0
 	if acount>2:
 		pressjudge=1
 		print("presjudge")
-    else:
-        pressjudge=0
-    return pressjudge
+	else:
+		pressjudge=0
+	return pressjudge
