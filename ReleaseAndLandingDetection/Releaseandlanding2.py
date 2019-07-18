@@ -78,7 +78,7 @@ if __name__ == "__main__":
 		while (tx2-tx1<=x):
 			luxjudge=Release.luxjudge()
 			pressjudge=Release.pressjudge()
-			if luxjudge==1 or presjudge==1:
+			if luxjudge==1 or pressjudge==1:
 				break
 			else:
 		   		print("taking photo")
