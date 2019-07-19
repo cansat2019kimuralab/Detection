@@ -25,7 +25,7 @@ bme280Data=[0.0,0.0]
 def pressjudge():
 	global Pcount
 	global bme280Data
-	print(str(bme280Data[1]))
+	print(Pcount)
 	secondlatestPRESS=bme280Data[1]
 	bme280Data=BME280.bme280_read()	#更新
 	latestPRESS=bme280Data[1]
