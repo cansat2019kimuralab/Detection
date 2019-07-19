@@ -43,6 +43,7 @@ def luxjudge():
 
 def pressjudge():
 	global PRESS
+	global bme280Data
 	PRESS[0]=bme280Data[1]
 	bme280Data=BME280.bme280_read()	#更新
 	PRESS[1]=bme280Data[1]
