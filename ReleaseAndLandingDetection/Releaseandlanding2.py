@@ -23,7 +23,7 @@ luxstr = ["lux1", "lux2"]																#variable to show lux returned variable
 bme280str = ["temp", "pres", "hum", "alt"]												#variable to show bme280 returned variables
 bmx055str = ["accx", "accy", "accz", "gyrx", "gyry", "gyrz", "dirx", "diry", "dirz"]	#variable to show bmx055 returned variables
 gpsstr = ["utctime", "lat", "lon", "sHeight", "gHeight"]								#variable to show GPS returned variables
-
+PRESS=[0.0,0.0]
 t_setup = 10	#variable to set waiting time after setup
 
 t = 1	#waitingtime
