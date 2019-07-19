@@ -83,7 +83,7 @@ if __name__ == "__main__":
 			if luxjudge==1 or pressjudge==1:
 				break
 			else:
-		   		print("now rising in rocket ,taking photo")
+		   		print("now in rocket ,taking photo")
 			time.sleep(2)
 			tx2=time.time()
 		else:
