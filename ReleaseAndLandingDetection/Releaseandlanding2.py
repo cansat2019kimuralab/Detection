@@ -75,13 +75,15 @@ if __name__ == "__main__":
 		# ------------------- Release Fhase ------------------- #
 		print("Releasing Judgement Program Start  {0}".format(time.time()))
 		#loopx
+		bme280Data=BME280.bme280_read()
+		PRESS[0]=bme280Data[1]
 		while (tx2-tx1<=x):
 			luxjudge=Release.luxjudge()
 			pressjudge=Release.pressjudge()
 			if luxjudge==1 or pressjudge==1:
 				break
 			else:
-		   		print("taking photo")
+		   		print("now rising in rocket ,taking photo")
 			time.sleep(2)
 			tx2=time.time()
 		print("THE ROVER HAS RELEASED")
@@ -96,7 +98,7 @@ if __name__ == "__main__":
 			if pressjudge ==1 and gpsjudge ==1:
 			    break
 			elif pressjudge==0 and gpsjudge==0:
-			    print("taking photo")
+			    print("Descend now taking photo")
 			elif pressjudge==1 or gpsjudge==1:
 			    print("landjudgementnow")
 			time.sleep(3)
