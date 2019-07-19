@@ -101,7 +101,7 @@ if __name__ == "__main__":
 			    print("landjudgementnow")
 			time.sleep(3)
 			ty2=time.time()
-			print("THE ROVER HAS LANDED")
+		print("THE ROVER HAS LANDED")
 	except KeyboardInterrupt:
 			close()
 			print("Keyboard Interrupt")
