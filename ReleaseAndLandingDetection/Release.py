@@ -20,6 +20,7 @@ import TSL2561
 luxdata=[]
 bme280Data=[0.0,0.0]
 lcount=0
+acount=0
 luxmax=200
 deltAmax=0.3
 presjudge=0
@@ -45,6 +46,7 @@ def luxjudge():
 def pressjudge():
 	global latestPRESS
 	global bme280Data
+	global acount
 	print(str(bme280Data[0]))
 	secondlatestPRESS=bme280Data[1]
 	bme280Data=BME280.bme280_read()	#更新
