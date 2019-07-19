@@ -23,6 +23,7 @@ Pcount=0
 GAcount=0
 def pressjudge():
 	global Pcount
+	global bme280Data
 	print(str(bme280Data[1]))
 	secondlatestPRESS=bme280Data[1]
 	bme280Data=BME280.bme280_read()	#更新
