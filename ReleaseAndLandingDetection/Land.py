@@ -23,12 +23,11 @@ Pcount=0
 GAcount=0
 def pressjudge():
 	global Pcount
-	bme280Data=BME280.bme280_read()#?
-	PRESS=bme280Data[1]
-	deltP=PRESS
+	print(str(bme280Data[1]))
+	secondlatestPRESS=bme280Data[1]
 	bme280Data=BME280.bme280_read()	#更新
-	PRESS=bme280Data[1]
-	deltP=deltP-PRESS
+	latestPRESS=bme280Data[1]
+	deltP=abs(latestPRESS-secondlatestPRESS)
 	if abs(deltP)<deltPmax:
 		Pcount+=1
 	elif abs(deltP)>deltPmax:
@@ -38,7 +37,7 @@ def pressjudge():
 		print("preslandjudge")
 	else:
 		preslandjudge=0
-	print(str(PRESS)+":"+str(deltP))
+	print(str(latestPRESS)+":"+str(deltP))
 	return preslandjudge
 
 def gpsjudge():
