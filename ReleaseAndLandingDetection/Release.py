@@ -18,7 +18,6 @@ import Melting
 import Motor
 import TSL2561
 luxdata=[]
-bme280Data=[]
 lcount=0
 luxmax=200
 deltAmax=0.3
