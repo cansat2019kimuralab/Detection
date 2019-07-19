@@ -24,6 +24,7 @@ luxmax=200
 deltAmax=0.3
 presjudge=0
 luxjudge=0
+PRESS=[0.0,0.0]
 
 def luxjudge():
 	luxdata=TSL2561.readLux()
@@ -41,7 +42,7 @@ def luxjudge():
 	return luxjudge
 
 def pressjudge():
-	global PRESS[0.0,0.0]
+	global PRESS
 	PRESS[0]=bme280Data[1]
 	bme280Data=BME280.bme280_read()	#更新
 	PRESS[1]=bme280Data[1]
