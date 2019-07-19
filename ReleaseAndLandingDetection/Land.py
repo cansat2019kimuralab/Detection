@@ -20,6 +20,7 @@ import TSL2561
 deltPmax=0.1
 deltHmax=5
 Pcount=0
+GAcount=0
 def pressjudge():
 	global Pcount
 	bme280Data=BME280.bme280_read()#?
@@ -42,6 +43,7 @@ def pressjudge():
 
 def gpsjudge():
 	gpsData=GPS.readGPS()#?
+	global GAcount
 	Gheight=gpsData[4]
 	deltH=Gheight
 	gpsData=GPS.readGPS()
