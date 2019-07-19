@@ -41,6 +41,7 @@ def pressjudge():
 	return preslandjudge
 
 def gpsjudge():
+	gpsData=GPS.readGPS()#?
 	Gheight=gpsData[4]
 	deltH=Gheight
 	gpsData=GPS.readGPS()
