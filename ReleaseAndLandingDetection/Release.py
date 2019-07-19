@@ -41,12 +41,11 @@ def luxjudge():
 	return luxjudge
 
 def pressjudge():
-	bme280Data=BME280.bme280_read()#?
-	PRESS=bme280Data[1]
-	deltA=PRESS
+	global PRESS[0.0,0.0]
+	PRESS[0]=bme280Data[1]
 	bme280Data=BME280.bme280_read()	#更新
-	PRESS=bme280Data[1]
-	deltA=PRESS-deltA
+	PRESS[1]=bme280Data[1]
+	deltA=PRESS[1]-PRESS[0]
 	if deltA>deltAmax:
 		acount+=1
 	elif deltA<deltAmax:
