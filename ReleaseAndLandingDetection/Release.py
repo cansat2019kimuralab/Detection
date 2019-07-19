@@ -24,7 +24,7 @@ luxmax=200
 deltAmax=0.3
 presjudge=0
 luxjudge=0
-PRESS=[0.0,0.0]
+PRESS=[0,0]
 
 def luxjudge():
 	luxdata=TSL2561.readLux()
