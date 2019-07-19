@@ -38,7 +38,7 @@ def pressjudge():
 		print("preslandjudge")
 	else:
 		preslandjudge=0
-	print(str(deltP))
+	print(str(PRESS)+":"+str(deltP))
 	return preslandjudge
 
 def gpsjudge():
@@ -61,4 +61,5 @@ def gpsjudge():
 		print("GPSlandjudge")
 	else:
 		gpsjudge=0
+	print(str(Gheight))
 	return gpsjudge
