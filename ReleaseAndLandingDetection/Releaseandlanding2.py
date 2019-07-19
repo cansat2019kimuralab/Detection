@@ -86,6 +86,8 @@ if __name__ == "__main__":
 		   		print("now rising in rocket ,taking photo")
 			time.sleep(2)
 			tx2=time.time()
+		else:
+			print("RELEASE TIMEOUT")
 		print("THE ROVER HAS RELEASED")
 		pi.write(22,1)
 		# ------------------- Landing Fhase ------------------- #
@@ -105,6 +107,8 @@ if __name__ == "__main__":
 			    print("landjudgementnow")
 			time.sleep(3)
 			ty2=time.time()
+		else:
+			print("RELEASE TIMEOUT")
 		print("THE ROVER HAS LANDED")
 		close()
 	except KeyboardInterrupt:
