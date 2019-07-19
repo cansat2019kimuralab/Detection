@@ -21,6 +21,7 @@ deltPmax=0.1
 deltHmax=5
 Pcount=0
 GAcount=0
+bme280Data=[0.0,0.0]
 def pressjudge():
 	global Pcount
 	global bme280Data
