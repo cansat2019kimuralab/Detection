@@ -35,8 +35,6 @@ acount=0
 Pcount=0
 GAcount=0
 luxmax=300
-deltAmax=0.3
-deltPmax=0.05
 deltHmax=5
 pi=pigpio.pi()
 def gpsSend(gpsData):
