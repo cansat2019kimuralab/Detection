@@ -25,7 +25,6 @@ bme280Data=[0.0,0.0]
 def pressjudge():
 	global Pcount
 	global bme280Data
-	print(Pcount)
 	secondlatestPRESS=bme280Data[1]
 	bme280Data=BME280.bme280_read()	#更新
 	latestPRESS=bme280Data[1]
@@ -40,6 +39,7 @@ def pressjudge():
 	else:
 		preslandjudge=0
 	print(str(latestPRESS)+"	:	"+"delt	"+str(deltP))
+	print("Pcount	"+Pcount)
 	return preslandjudge
 
 def gpsjudge():
