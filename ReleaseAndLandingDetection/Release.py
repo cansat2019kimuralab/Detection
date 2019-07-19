@@ -18,6 +18,7 @@ import Melting
 import Motor
 import TSL2561
 luxdata=[]
+bme280Data=[]
 lcount=0
 luxmax=200
 deltAmax=0.3
@@ -40,7 +41,7 @@ def luxjudge():
 	return luxjudge
 
 def pressjudge():
-	bme280Data=BME280.bme280_read()#?
+	bme280Data=BME280.bme280_read()
 	PRESS=bme280Data[1]
 	deltA=PRESS
 	bme280Data=BME280.bme280_read()	#更新
