@@ -43,13 +43,12 @@ def pressjudge():
 	return preslandjudge
 
 def gpsjudge():
-	gpsData=GPS.readGPS()#?
 	global GAcount
 	Gheight=gpsData[4]
 	deltH=Gheight
 	gpsData=GPS.readGPS()
 	Gheight=gpsData[4]
-	deltH=deltH-Gheight
+	deltH=abs(deltH-Gheight)
 	print(Gheight)
 	#3秒ごとに判定
 	time.sleep(3)
