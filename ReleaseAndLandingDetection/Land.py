@@ -23,6 +23,7 @@ Pcount=0
 GAcount=0
 bme280Data=[0.0,0.0]
 gpsData=[0.0,0.0,0.0,0.0,0.0,0.0]
+preslandjudge=0
 def pressjudge():
 	global Pcount
 	global bme280Data
