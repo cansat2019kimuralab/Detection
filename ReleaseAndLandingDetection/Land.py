@@ -49,7 +49,7 @@ def gpsjudge():
 	secondlatestGheight=gpsData[4]
 	gpsData=GPS.readGPS()
 	latestGheight=gpsData[4]
-	deltH=abs(latestGheight-secondlatestGheight)
+	deltH=abs(float(latestGheight)-float(secondlatestGheight))
 	print(latestGheight)
 	#3秒ごとに判定
 	time.sleep(3)
