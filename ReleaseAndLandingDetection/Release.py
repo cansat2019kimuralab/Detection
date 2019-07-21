@@ -37,10 +37,10 @@ def luxjudge():
 		lcount=0
 	if lcount>4:
 		luxjudge=1
-		print("luxreleasejudge")
+		#print("luxreleasejudge")
 	else:
 		luxjudge=0
-	print("lux"+"	"+str(luxdata[0])+"	:	"+str(luxdata[1]))
+	#print("lux"+"	"+str(luxdata[0])+"	:	"+str(luxdata[1]))
 	return luxjudge
 
 def pressjudge():
@@ -58,8 +58,8 @@ def pressjudge():
 		acount=0
 	if acount>2:
 		pressjudge=1
-		print("presjudge")
+		#print("presjudge")
 	else:
 		pressjudge=0
-	print(str(latestPRESS)+"	:	"+str(secondlatestPRESS)+"	:	"+str(deltA))
+	#print(str(latestPRESS)+"	:	"+str(secondlatestPRESS)+"	:	"+str(deltA))
 	return pressjudge
