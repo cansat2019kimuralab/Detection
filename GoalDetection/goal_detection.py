@@ -1,22 +1,26 @@
 ﻿
+import sys
+sys.path.append('/home/pi/git/kimuralab/SensorModuleTest/Camera')
 import cv2
 import numpy as np
 import math
-
-
-'''
-引数	画像(cv::Mat)
-戻り値	[距離,角度]
+import Capture
 
 '''
+input	imgpath
+output	[distance,angle]
+
+'''
 
 
 
-def GoalDetection(img):
+def GoalDetection(imgpath):
+	imgname = Capture.Capture(imgpath)
+	img = cv2.imread(imgname)
 	#cv2.imshow('Input Image',img)
 	hig, wid, col = img.shape
 
-	#mask生成
+	#make mask
 
 	img_HSV = cv2.cvtColor(cv2.GaussianBlur(img,(15,15),0),cv2.COLOR_BGR2HSV_FULL)
 
@@ -28,11 +32,11 @@ def GoalDetection(img):
 
 	#cv2.imshow('Red Zone', mask)
 
-	#輪郭処理
+	#contour
 	mask, contours, hierarchy = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
 
-	#最大面積
+	#max area
 	max_area = 0
 	max_area_contour = -1
 
@@ -46,22 +50,18 @@ def GoalDetection(img):
 
 	#print('Max area is',max_area)
 
-	#goal未検出時
+	#no goal
 	if max_area <= 100:
 		print( "There is not the target" )
-		cv2.waitKey()
-		cv2.destroyAllWindows()
-		return [-1,-1]
+		return [-1,-1,imgname]
 
-	#goal判定
+	#goal
 
 	if max_area >= 80000:
 		print( "GOAL" )
-		cv2.waitKey()
-		cv2.destroyAllWindows()
-		return [0,0]
+		return [0,0,imgname]
 
-	#垂直な矩形
+	#rectangle
 	x,y,w,h = cv2.boundingRect(cnt)
 
 	#img = cv2.rectangle(img,(x,y),(x+w,y+h),(0,255,0),2)
@@ -74,12 +74,12 @@ def GoalDetection(img):
 	if GAP < 0:
 		print('The target is', abs(GAP), 'degrees to the left')
 
-	img = cv2.circle(img,(int(x+w/2),int(y+3*h/4)), 2, (255,0,0), -1, cv2.LINE_AA)
+	#img = cv2.circle(img,(int(x+w/2),int(y+3*h/4)), 2, (255,0,0), -1, cv2.LINE_AA)
 
 
-	#距離計算
-	L_samp = 10		#基準距離
-	S_samp = 200	#基準面積
+	#calculate distance
+	L_samp = 10		#standard distance
+	S_samp = 200	#standard area
 	L = L_samp*math.sqrt(S_samp)/math.sqrt(max_area)
 
 	print('The target is', '{:.1f}'.format(L), 'm from here')
@@ -88,8 +88,7 @@ def GoalDetection(img):
 	#cv2.waitKey()
 	#cv2.destroyAllWindows()
 
-	return [L,GAP]
+	return [L,GAP,imgname]
 
 if __name__ == "__main__":
-	im = cv2.imread('picture/target10.jpg')
-	GoalDetection(im)
+	GoalDetection(photo)
