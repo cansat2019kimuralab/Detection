@@ -42,7 +42,7 @@ def pressjudge():
 		preslandjudge=0
 	print(str(latestPRESS)+"	:	"+"delt	"+str(deltP))
 	print("Pcount	"+str(Pcount))
-	return preslandjudge
+	return preslandjudge,Pcount
 
 def gpsjudge():
 	global GAcount
@@ -64,4 +64,4 @@ def gpsjudge():
 	else:
 		gpsjudge=0
 	#print(str(Gheight))
-	return gpsjudge
+	return gpsjudge,GAcount
