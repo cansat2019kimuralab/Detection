@@ -46,6 +46,10 @@ def GoalDetection(imgpath):
 			max_area = area
 			max_area_contour = j
 
+	if max_area_contour == -1:
+		print( "There is not the target" )
+		return [-1,-1,imgname]
+		
 	cnt = contours[max_area_contour]
 
 	#print('Max area is',max_area)
@@ -57,7 +61,7 @@ def GoalDetection(imgpath):
 
 	#goal
 
-	if max_area >= 80000:
+	if max_area >= 1000:
 		print( "GOAL" )
 		return [0,0,imgname]
 
@@ -68,12 +72,14 @@ def GoalDetection(imgpath):
 
 	GAP = x+w/2-wid/2
 
-	if GAP >= 0:
+	if GAP > 0:
 		print('The target is', GAP, 'degrees to the right')
 
-	if GAP < 0:
+	elif GAP < 0:
 		print('The target is', abs(GAP), 'degrees to the left')
 
+	else :
+		print('The target is center')
 	#img = cv2.circle(img,(int(x+w/2),int(y+3*h/4)), 2, (255,0,0), -1, cv2.LINE_AA)
 
 
@@ -91,4 +97,4 @@ def GoalDetection(imgpath):
 	return [L,GAP,imgname]
 
 if __name__ == "__main__":
-	GoalDetection(photo)
+	GoalDetection("photo")
