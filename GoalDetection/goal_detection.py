@@ -14,7 +14,7 @@ output	[distance,angle]
 
 
 
-def GoalDetection(imgpath, H_min = 120, H_max = 10, S_thd = 120):
+def GoalDetection(imgpath, H_min, H_max, S_thd):
 	imgname = Capture.Capture(imgpath)
 	img = cv2.imread(imgname)
 	hig, wid, col = img.shape
