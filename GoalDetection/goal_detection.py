@@ -47,14 +47,15 @@ def GoalDetection(imgpath, H_min, H_max, S_thd):
 		return [-1,-1,imgname]
 		
 	cnt = contours[max_area_contour]
-	#print('Max area is',max_area)
 
+	print('Max area is',max_area)
 	#no goal
 	if max_area <= 100:
 		print( "There is not the target" )
 		return [-1,-1,imgname]
 
 	#goal
+
 	if max_area >= 70000:
 		print( "GOAL" )
 		return [0,0,imgname]
