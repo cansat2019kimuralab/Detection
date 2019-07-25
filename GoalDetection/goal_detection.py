@@ -6,14 +6,6 @@ import numpy as np
 import math
 import Capture
 
-'''
-input	imgpath
-output	[distance,angle]
-
-'''
-
-
-
 def GoalDetection(imgpath, H_min, H_max, S_thd):
 	imgname = Capture.Capture(imgpath)
 	img = cv2.imread(imgname)
@@ -83,4 +75,4 @@ def GoalDetection(imgpath, H_min, H_max, S_thd):
 	return [L,GAP,imgname]
 
 if __name__ == "__main__":
-	GoalDetection("photo")
+	GoalDetection("photo",200 ,10, 120)
