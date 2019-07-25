@@ -14,23 +14,19 @@ output	[distance,angle]
 
 
 
-def GoalDetection(imgpath):
+def GoalDetection(imgpath, H_min = 120, H_max = 10, S_thd = 120):
 	imgname = Capture.Capture(imgpath)
 	img = cv2.imread(imgname)
-	#cv2.imshow('Input Image',img)
 	hig, wid, col = img.shape
 
 	#make mask
-
 	img_HSV = cv2.cvtColor(cv2.GaussianBlur(img,(15,15),0),cv2.COLOR_BGR2HSV_FULL)
 
 	h = img_HSV[:, :, 0]
 	s = img_HSV[:, :, 1]
 
 	mask = np.zeros(h.shape, dtype=np.uint8)
-	mask[((h < 10) | (h > 200)) & (s > 120)] = 255
-
-	#cv2.imshow('Red Zone', mask)
+	mask[((h < H_max) | (h > H_min)) & (s > S_thd)] = 255
 
 	#contour
 	mask, contours, hierarchy = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -51,7 +47,6 @@ def GoalDetection(imgpath):
 		return [-1,-1,imgname]
 		
 	cnt = contours[max_area_contour]
-
 	#print('Max area is',max_area)
 
 	#no goal
@@ -60,7 +55,6 @@ def GoalDetection(imgpath):
 		return [-1,-1,imgname]
 
 	#goal
-
 	if max_area >= 1000:
 		print( "GOAL" )
 		return [0,0,imgname]
@@ -68,8 +62,7 @@ def GoalDetection(imgpath):
 	#rectangle
 	x,y,w,h = cv2.boundingRect(cnt)
 
-	#img = cv2.rectangle(img,(x,y),(x+w,y+h),(0,255,0),2)
-
+	#center of the target <-> center of the picture (pixel)
 	GAP = x+w/2-wid/2
 
 	if GAP > 0:
@@ -80,20 +73,12 @@ def GoalDetection(imgpath):
 
 	else :
 		print('The target is center')
-	#img = cv2.circle(img,(int(x+w/2),int(y+3*h/4)), 2, (255,0,0), -1, cv2.LINE_AA)
-
 
 	#calculate distance
 	L_samp = 10		#standard distance
 	S_samp = 200	#standard area
 	L = L_samp*math.sqrt(S_samp)/math.sqrt(max_area)
-
-	print('The target is', '{:.1f}'.format(L), 'm from here')
-
-	#cv2.imshow("target", img)
-	#cv2.waitKey()
-	#cv2.destroyAllWindows()
-
+	#print('The target is', '{:.1f}'.format(L), 'm from here')
 	return [L,GAP,imgname]
 
 if __name__ == "__main__":
