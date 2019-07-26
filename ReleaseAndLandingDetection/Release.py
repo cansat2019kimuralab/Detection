@@ -62,4 +62,4 @@ def pressjudge():
 	else:
 		pressjudge=0
 	#print(str(latestPRESS)+"	:	"+str(secondlatestPRESS)+"	:	"+str(deltA))
-	return pressjudge
+	return pressjudge,acount
