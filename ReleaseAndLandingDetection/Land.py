@@ -47,9 +47,9 @@ def pressjudge():
 def gpsjudge():
 	global GAcount
 	global gpsData
-	secondlatestGheight=gpsData[4]
+	secondlatestGheight=gpsData[3]
 	gpsData=GPS.readGPS()
-	latestGheight=gpsData[4]
+	latestGheight=gpsData[3]
 	deltH=abs(float(latestGheight)-float(secondlatestGheight))
 	print(latestGheight)
 	#3秒ごとに判定
