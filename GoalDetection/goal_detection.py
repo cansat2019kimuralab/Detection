@@ -58,13 +58,13 @@ def GoalDetection(imgpath, H_min, H_max, S_thd):
 	#print("center of the picture is",wid)
 
 	if GAP > 0:
-		print('The target is', GAP, 'degrees to the right')
+		print('The target is', GAP, 'pixel to the RIGHT')
 
 	elif GAP < 0:
-		print('The target is', abs(GAP), 'degrees to the left')
+		print('The target is', abs(GAP), 'pixel to the LEFT')
 
 	else :
-		print('The target is center')
+		print('The target is CENTER')
 
 	#calculate distance
 	#L_samp = 5		#standard distance
