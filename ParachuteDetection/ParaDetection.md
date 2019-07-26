@@ -1,6 +1,6 @@
 # ParaDetection.py
 ---
-## ParaDetection()
+## ParaDetection(imgpath)
 ### 引数：  
  - 画像  
 ### 戻り値：  
