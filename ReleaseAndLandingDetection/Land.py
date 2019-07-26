@@ -63,5 +63,5 @@ def gpsjudge():
 		print("GPSlandjudge")
 	else:
 		gpsjudge=0
-	#print(str(Gheight))
+	print("GAcount"+str(GAcount))
 	return gpsjudge,GAcount
