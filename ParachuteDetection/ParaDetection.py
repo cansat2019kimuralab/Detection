@@ -59,5 +59,5 @@ def ParaDetection(imgpath, H_min, H_max, S_thd):
 		return [1, max_area, imgname]
 
 if __name__ == "__main__":
-	ParaDetection(photo)
+	ParaDetection("photo")
 
