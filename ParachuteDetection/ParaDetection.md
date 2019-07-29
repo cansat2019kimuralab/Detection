@@ -1,10 +1,12 @@
 # ParaDetection.py
 ---
-## ParaDetection(imgpath)
+## ParaDetection(imgpath, H_min, H_max, S_thd)
 ### 引数：  
  - imgpath: 画像のpath  
 ### 戻り値：  
- - flug(0パラシュートなし、１パラシュートあり)   
+ - flug(0パラシュートなし、１パラシュートあり)  
+ - max_area  
+ - imgname   
 --- 
 ---
 ## ParaJudge(LxThd)
