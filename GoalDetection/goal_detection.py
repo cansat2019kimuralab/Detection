@@ -3,7 +3,6 @@ import sys
 sys.path.append('/home/pi/git/kimuralab/SensorModuleTest/Camera')
 import cv2
 import numpy as np
-import math
 import Capture
 
 def GoalDetection(imgpath, H_min, H_max, S_thd):
@@ -66,11 +65,6 @@ def GoalDetection(imgpath, H_min, H_max, S_thd):
 	else :
 		print('The target is CENTER')
 
-	#calculate distance
-	#L_samp = 5		#standard distance
-	#S_samp = 250	#standard area
-	#L = L_samp*math.sqrt(S_samp)/math.sqrt(max_area)
-	#print('The target is', '{:.1f}'.format(L), 'm from here')
 	return [max_area, GAP, imgname]
 
 if __name__ == "__main__":
