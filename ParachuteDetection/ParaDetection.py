@@ -1,9 +1,11 @@
 import sys
 sys.path.append('/home/pi/git/kimuralab/SensorModuleTest/TSL2561')
+sys.path.append('/home/pi/git/kimuralab/SensorModuleTest/Camera')
 import time
 import cv2
 import numpy as np
 import difflib
+import Capture
 import TSL2561
 
 
@@ -21,13 +23,15 @@ def ParaJudge(LuxThd):
 		return [1, lux[0]]
 
 
-def ParaDetection(img):
+def ParaDetection(imgpath, H_min, H_max, S_thd):
+	imgname = Capture.Capture(imgpath)
+	img = cv2.imread(imgname)
 	#make mask
 	img_HSV = cv2.cvtColor(cv2.GaussianBlur(img,(15,15),0),cv2.COLOR_BGR2HSV_FULL)
 	h = img_HSV[:, :, 0]
 	s = img_HSV[:, :, 1]
 	mask = np.zeros(h.shape, dtype=np.uint8)
-	mask[((h < 10) | (h > 200)) & (s > 120)] = 255
+	mask[((h < H_max) | (h > H_min)) & (s > S_thd)] = 255
 
 	#contour
 	mask, contours, hierarchy = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -46,15 +50,14 @@ def ParaDetection(img):
 	#No Parachute 
 	if max_area <= 100:
 		#print( "There is not the Parachute" )
-		return [0, max_area]
+		return [0, max_area, imgname]
 
 	#Prachute 
 
 	else:
 		#print( "There is the Parachute" )
-		return [1, max_area]
+		return [1, max_area, imgname]
 
 if __name__ == "__main__":
-	im = cv2.imread('photo/photo1.jpg')
-	ParaDetection(im)
+	ParaDetection(photo)
 
