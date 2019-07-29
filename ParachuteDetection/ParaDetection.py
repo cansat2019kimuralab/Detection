@@ -46,13 +46,13 @@ def ParaDetection(img):
 	#No Parachute 
 	if max_area <= 100:
 		#print( "There is not the Parachute" )
-		return [0, max_area, img]
+		return [0, max_area]
 
 	#Prachute 
 
 	else:
 		#print( "There is the Parachute" )
-		return [1, max_area, img]
+		return [1, max_area]
 
 if __name__ == "__main__":
 	im = cv2.imread('photo/photo1.jpg')
