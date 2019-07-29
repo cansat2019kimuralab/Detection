@@ -4,7 +4,6 @@ sys.path.append('/home/pi/git/kimuralab/SensorModuleTest/Camera')
 import time
 import cv2
 import numpy as np
-import difflib
 import Capture
 import TSL2561
 
