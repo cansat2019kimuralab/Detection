@@ -37,13 +37,11 @@ def ParaDetection(imgpath, H_min, H_max, S_thd):
 
 	#max area
 	max_area = 0
-	max_area_contour = -1
 
 	for j in range(0,len(contours)):
 		area = cv2.contourArea(contours[j])
 		if max_area < area:
 			max_area = area
-			max_area_contour = j
 	#print('Max area is',max_area)
 
 	#No Parachute 
@@ -58,5 +56,5 @@ def ParaDetection(imgpath, H_min, H_max, S_thd):
 		return [1, max_area, imgname]
 
 if __name__ == "__main__":
-	ParaDetection("photo")
+	ParaDetection("photo", 200, 10, 120)
 
