@@ -9,8 +9,6 @@ import TSL2561
 
 
 def ParaJudge(LuxThd):
-	Motor.motor(30,30,0.2)
-	Motor.motor(0,0,0.2)
 	lux=TSL2561.readLux()
 	#print("lux1: "+str(lux[0]))
 
