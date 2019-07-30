@@ -9,5 +9,6 @@
   - S_thd: 彩度の閾値
   ### 戻り値：[max_area, GAP, imgname]
    - GAP:画像の中心とゴールの中心の差（ピクセル）  
-   - max_area:ゴールの面積
+   - max_area:ゴールの面積  
+   - imgname:処理した画像の名前
 ---
