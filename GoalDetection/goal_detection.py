@@ -44,7 +44,7 @@ def GoalDetection(imgpath, H_min, H_max, S_thd):
 	print('Max area is',max_area)
 
 	#goal
-	if max_area >= 40000:
+	if max_area >= 20000:
 		print( "GOAL" )
 		return [-1,0,imgname]
 
