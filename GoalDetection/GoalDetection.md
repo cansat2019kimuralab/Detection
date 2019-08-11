@@ -9,7 +9,7 @@
   - H_max: 色相の最大値  
   - S_thd: 彩度の閾値
   ### 戻り値：[max_area, GAP, imgname]  
-   - goalFlug 0:goal, -1:not detect, -1:no goal   
+   - goalFlug 0:goal, -1:not detect, 1:no goal   
    - GAP:画像の中心とゴールの中心の差（ピクセル）  
    - max_area:ゴールの面積  
    - imgname:処理した画像の名前
