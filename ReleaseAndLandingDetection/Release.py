@@ -22,7 +22,7 @@ luxmax = 80
 deltAmax = 0.3
 pressjudge = 0
 luxjudge = 0
-secondlatestPRESS = 0.0
+secondlatestPRESS = 2000.0 #prevent first error judgemnt
 latestPRESS = 0.0
 
 def luxjudge():
