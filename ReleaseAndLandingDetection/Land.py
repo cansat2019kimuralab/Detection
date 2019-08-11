@@ -4,8 +4,6 @@ sys.path.append('/home/pi/git/kimuralab/SensorModuleTest/BMX055')
 sys.path.append('/home/pi/git/kimuralab/SensorModuleTest/Camera')
 sys.path.append('/home/pi/git/kimuralab/SensorModuleTest/GPS')
 sys.path.append('/home/pi/git/kimuralab/SensorModuleTest/IM920')
-sys.path.append('/home/pi/git/kimuralab/SensorModuleTest/Melting')
-sys.path.append('/home/pi/git/kimuralab/SensorModuleTest/Motor')
 sys.path.append('/home/pi/git/kimuralab/SensorModuleTest/TSL2561')
 import time
 import serial
@@ -14,8 +12,6 @@ import BME280
 import BMX055
 import IM920
 import GPS
-import Melting
-import Motor
 import TSL2561
 deltPmax=0.1
 deltHmax=5
