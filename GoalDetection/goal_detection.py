@@ -72,7 +72,7 @@ def GoalDetection(imgpath, H_min, H_max, S_thd, G_thd):
 
 	#goal
 	elif max_area >= G_thd:
-		return [0, -1 ,0, imgname]
+		return [0, max_area ,0, imgname]
 	else:
 		#rectangle
 		cnt = contours[max_area_contour]
