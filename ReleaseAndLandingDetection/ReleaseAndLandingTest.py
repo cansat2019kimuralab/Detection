@@ -1,242 +1,270 @@
 # -*- coding: utf-8 -*-
-
 import sys
-sys.path.append('/home/pi/git/kimuralab/SensorModuleTest/GPS')
-sys.path.append('/home/pi/git/kimuralab/SensorModuleTest/IM920')
+sys.path.append('/home/pi/git/kimuralab/Detection/ParachuteDetection')
+sys.path.append('/home/pi/git/kimuralab/Detection/ReleaseAndLandingDetection')
+sys.path.append('/home/pi/git/kimuralab/IntegratedProgram/Calibration')
+sys.path.append('/home/pi/git/kimuralab/IntegratedProgram/Goal')
+sys.path.append('/home/pi/git/kimuralab/IntegratedProgram/ParaAvoidance')
+sys.path.append('/home/pi/git/kimuralab/IntegratedProgram/Running')
+sys.path.append('/home/pi/git/kimuralab/Mission')
 sys.path.append('/home/pi/git/kimuralab/SensorModuleTest/BME280')
 sys.path.append('/home/pi/git/kimuralab/SensorModuleTest/BMX055')
 sys.path.append('/home/pi/git/kimuralab/SensorModuleTest/Camera')
+sys.path.append('/home/pi/git/kimuralab/SensorModuleTest/GPS')
+sys.path.append('/home/pi/git/kimuralab/SensorModuleTest/IM920')
+sys.path.append('/home/pi/git/kimuralab/SensorModuleTest/Melting')
+sys.path.append('/home/pi/git/kimuralab/SensorModuleTest/Motor')
 sys.path.append('/home/pi/git/kimuralab/SensorModuleTest/TSL2561')
-import time
+sys.path.append('/home/pi/git/kimuralab/Other')
+
+import binascii
 import difflib
+import numpy as np
 import pigpio
 import serial
-import binascii
-import IM920
-import GPS
+import time
+import traceback
+
 import BMX055
 import BME280
 import Capture
+import Calibration
+import Goal
+import GPS
+import IM920
+import Land
+import Melting
+import Motor
+import Other
+import ParaDetection
+import ParaAvoidance
+import Release
+import RunningGPS
 import TSL2561
 
-luxstr = ["lux1", "lux2"]
-bme280str = ["temp", "pres", "hum", "alt"]
-bmx055str = ["accx", "accy", "accz", "gyrx", "gyry", "gyrz", "dirx", "diry", "dirz"]
-gpsstr = ["utctime", "lat", "lon", "sHeight", "gHeight"]
+phaseChk = 0	#variable for phase Check
 
-t = 1	#待機時間
-x = 61	#放出判定の時間
-y = 60	#着地判定の時間
-z = 120	#走行の時間
+# --- variable of time setting --- #
+t_start  = 0.0				#time when program started
+t_sleep = 60				#time for sleep phase
+t_release = 120				#time for release(loopx)
+t_land = 300				#time for land(loopy)
+t_melt = 5					#time for melting
+t_sleep_start = 0			#time for sleep origin
+t_release_start = 0			#time for release origin
+t_land_start = 0			#time for land origin
+t_calib_origin = 0			#time for calibration origin
+t_paraDete_start = 0
+t_takePhoto_start = 0		#time for taking photo
+timeout_calibration = 180	#time for calibration timeout
+timeout_parachute = 60
+timeout_takePhoto = 10		#time for taking photo timeout
 
+# --- variable for storing sensor data --- #
+gpsData = [0.0,0.0,0.0,0.0,0.0]						#variable to store GPS data
+bme280Data = [0.0,0.0,0.0,0.0]						#variable to store BME80 data
+bmx055data = [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0]	#variable to store BMX055 data
 
-pi=pigpio.pi()
+# --- variable for Judgement --- #
+lcount = 0		#lux count for release
+acount = 0		#press count for release
+Pcount = 0		#press count for land
+GAcount = 0
+gacount=0		#GPSheight count for land
+luxjudge = 0	#for release
+pressjudge = 0	#for release and land
+gpsjudge = 0	#for land
+paraExsist = 0 	#variable for Para Detection    0:Not Exsist, 1:Exsist
+goalFlug = -1	#variable for GoalDetection		-1:Not Detect, 0:Goal, 1:Detect
+goalBuf = -1
+goalArea = 0	#variable for goal area
+goalGAP = -1	#variable for goal gap
+H_min = 200		#Hue minimam
+H_max = 10		#Hue maximam
+S_thd = 120		#Saturation threshold
 
-def gpsSend(gpsData):
-	IM920.Send('g'+str(gpsData[0]) + ',' + str(gpsData[1]) + ',' + str(gpsData[2]) + ',' + str(gpsData[3]) + ',' + str(gpsData[4]) + ',' + str(gpsData[5]))
+# --- variable for Running --- #
+fileCal = "" 						#file path for Calibration
+ellipseScale = [0.0, 0.0, 0.0, 0.0] #Convert coefficient Ellipse to Circle
+disGoal = 100.0						#Distance from Goal [m]
+angGoal = 0.0						#Angle toword Goal [deg]
+angOffset = -77.0					#Angle Offset towrd North [deg]
+gLat, gLon = 35.742532, 140.011542	#Coordinates of That time
+nLat, nLon = 0.0, 0.0		  		#Coordinates of That time
+nAng = 0.0							#Direction of That time [deg]
+relAng = [0.0, 0.0, 0.0]			#Relative Direction between Goal and Rober That time [deg]
+rAng = 0.0							#Median of relAng [deg]
+mP, mPL, mPR, mPS = 0, 0, 0, 0		#Motor Power
+kp = 0.8							#Proportional Gain
+maxMP = 60							#Maximum Motor Power
+mp_min = 20							#motor power for Low level
+mp_max = 50							#motor power fot High level
+mp_adj = 2							#adjust motor power
+
+# --- variable of Log path --- #
+phaseLog =			"/home/pi/log/phaseLog.txt"
+sleepLog = 			"/home/pi/log/sleepLog.txt"
+releaseLog = 		"/home/pi/log/releaseLog.txt"
+landingLog = 		"/home/pi/log/landingLog.txt"
+meltingLog = 		"/home/pi/log/meltingLog.txt"
+paraAvoidanceLog = 	"/home/pi/log/paraAvoidanceLog.txt"
+runningLog = 		"/home/pi/log/runningLog.txt"
+goalDetectionLog =	"/home/pi/log/goalDetectionLog.txt"
+captureLog = 		"/home/pi/log/captureLog.txt"
+missionLog = 		"/home/pi/log/missionLog.txt"
+calibrationLog = 	"/home/pi/log/calibrationLog"
+errorLog = 			"/home/pi/log/erroLog.txt"
+
+photopath = 		"/home/pi/photo/photo"
+photoName =			""
+
+pi=pigpio.pi()	#object to set pigpio
+
 
 def setup():
+	global phaseChk
+	pi.set_mode(17,pigpio.OUTPUT)
 	pi.set_mode(22,pigpio.OUTPUT)
-	pi.write(22,0)
-	pi.write(17,0)
+	pi.write(22,1)					#IM920	Turn On
+	pi.write(17,0)					#Outcasing Turn Off
 	time.sleep(1)
 	BME280.bme280_setup()
 	BME280.bme280_calib_param()
 	BMX055.bmx055_setup()
 	GPS.openGPS()
-	with open('log/releaseLog.txt', 'a') as f:
+
+	with open(phaseLog, 'a') as f:
 		pass
-	with open('log/landingLog.txt', 'a') as f2:
-		pass
-	with open('log/runningLog.txt', 'a') as f3:
-		pass
+
+	#if it is End to End Test, then
+	try:
+		phaseChk = int(Other.phaseCheck(phaseLog))
+	except:
+		phaseChk = 0
+	#if it is debug
+	phaseChk = 3
 
 def close():
 	GPS.closeGPS()
+	pi.write(22, 1)		#IM920 Turn On
+	pi.write(17,0)
+	Motor.motor(0, 0, 1)
+	Motor.motor_stop()
+
 
 if __name__ == "__main__":
-	print("Program Start  {0}".format(time.time()))
-
 	try:
+		print("Program Start  {0}".format(time.time()))
+		t_start = time.time()
+
+		#-----setup phase ---------#
 		setup()
-		time.sleep(t)
-		bme280Data=BME280.bme280_read()
-		lcount=0
-		acount=0
-		Pcount=0
-		GAcount=0
-		luxmax=300
-		deltAmax=0.3
-		deltPmax=0.05
-		deltHmax=5
+		print("Start Phase is {0}".format(phaseChk))
+		if(phaseChk <= 1):
+			IM920.Send("P1S")
+			Other.saveLog(phaseLog, "1", "Program Started", time.time() - t_start)
+			IM920.Send("P1F")
 
-		tx1 = time.time()
-		tx2 = tx1
+		# ------------------- Sleep Phase --------------------- #
+		if(phaseChk <= 2):
+			Other.saveLog(phaseLog, "2", "Sleep Phase Started", time.time() - t_start)
+			print("Sleep Phase Started  {0}".format(time.time() - t_start))
+			IM920.Send("P2S")
+			#pi.write(22, 0)			#IM920 Turn Off
+			t_sleep_start = time.time()
 
-		#溶断まで
-		print("Releasing Judgement Program Start  {0}".format(time.time()))
+			# --- Sleep --- #
+			while(time.time() - t_sleep_start <= t_sleep):
+				Other.saveLog(sleepLog, time.time() - t_start, GPS.readGPS(), BME280.bme280_read(), TSL2561.readLux(), BMX055.bmx055_read())
+				photoName = Capture.Capture(photopath)
+				Other.saveLog(captureLog, time.time() - t_start, GPS.readGPS(), BME280.bme280_read(), photoName)
+				time.sleep(1)
+				IM920.Send("P2D")
+			IM920.Send("P2F")
 
-		with open('log/releaseLog.txt', 'a') as f:
-			f.write("\n")
-			#ループx
-			while(1):
+		# ------------------- Release Phase ------------------- #
+		if(phaseChk <= 3):
+			Other.saveLog(phaseLog, "3", "Release Phase Started", time.time() - t_start)
+			t_release_start = time.time()
+			print("Releasing Phase Started  {0}".format(time.time() - t_start))
+			#IM920.Send("P3S")
 
-				#tx2を更新
-				tx2=time.time()
-				#放出判定(照度センサ)
-				luxdata=TSL2561.readLux()
-				#f.write(str(luxdata[0])+":"+str(luxdata[1]))
-				print("lux1: "+str(luxdata[0])+" "+"lux2: "+str(luxdata[1]))
-				f.write(str(luxdata[0])+"	"+str(luxdata[1])+"		")
-
-				print(lcount)
-				print(acount)
-
-				if luxdata[0]>luxmax or luxdata[1]>luxmax:
-					lcount+=1
-				elif luxdata[0]<luxmax and luxdata[1]<luxmax:
-					lcount=0
-				if lcount>4:
-					luxreleasejudge=True
-					print("luxreleasejudge")
-				else:
-					luxreleasejudge=False
-				#放出判定（気圧センサ）
-					PRESS=bme280Data[1]
-					deltA=PRESS
-					bme280Data=BME280.bme280_read()	#更新
-					PRESS=bme280Data[1]
-					deltA=PRESS-deltA
-					#f.write("P0:P1"+str(P0)+":"+str(P1))
-					print(str(PRESS))
-					print(str(deltA))
-					time.sleep(2)
-					#3秒前の値と比較
-					#高度差が式一以上でacout+=1
-					if deltA>deltAmax:
-						acount+=1
-					elif deltA<deltAmax:
-						acount=0
-					if acount>2:
-						presreleasejudge=True
-						print("presjudge")
-
-					else:
-						presreleasejudge=False
-				f.write(str(deltA)+"   "+str(PRESS)+"\t")
-				f.write("\n")
-
-				if luxreleasejudge or presreleasejudge:
-					ty1=time.time()
-					ty2=ty1
-					print("RELEASE!")
-					f.write("release")
-					pi.write(22,0)
-					bme280Data=BME280.bme280_read()
-					gpsData = GPS.readGPS()
-					#ループyのタイムアウト判定
-					with open('log/landingLog.txt', 'a') as f2:
-						f.write("\n")
-						while(ty2-ty1<=y):
-							print(str(ty2-ty1))
-							ty2=time.time()
-							#気圧判定
-							PRESS=bme280Data[1]
-							deltP=PRESS
-							bme280Data=BME280.bme280_read()	#更新
-							PRESS=bme280Data[1]
-							deltP=deltP-PRESS
-							f2.write(str(deltP))#+":"+str(PRESS)+ "\t")
-							f2.write("\n")
-							print(deltP)
-							print("Pcount:"+str(Pcount))
-							if abs(deltP)<deltPmax:
-								Pcount+=1
-							elif abs(deltP)>deltPmax:
-								Pcount=0
-							if Pcount>4:
-								preslandjudge=True
-								print("preslandjudge")
-							else:
-								preslandjudge=False
-
-							#GPS高度判定
-							Gheight=gpsData[4]
-							deltH=Gheight
-							gpsData=GPS.readGPS()
-							Gheight=gpsData[4]
-							deltH=deltH-Gheight
-							print(Gheight)
-							#3秒ごとに判定
-							time.sleep(3)
-							if abs(deltH)<deltHmax:
-								GAcount+=1
-							elif abs(deltH)>deltHmax :
-								GAcount=0
-							if GAcount>4:
-								GPSlandjudge=True
-								print("GPSlandjudge")
-							else:
-								GPSlandjudge=False
-
-
-							#気圧と高度が変化していたら撮影
-							if not preslandjudge and not GPSlandjudge:
-								print("satueinow")
-								#撮影
-							#両方に変化なければ着地、ループyを抜ける
-							elif preslandjudge and  GPSlandjudge:
-								break
-							else:
-								print("Landingjudgement now")
-					#ループy中でbreakが起きなければ続行、起きたら全体も抜ける
-						else:
-							print("THE ROVER HAS LANDED(timeout y).  {0}".format(time.time()))
-							f2.write("land")
-							break
-						print("THE ROVER HAS LANDED.  {0}".format(time.time()))
-						f2.write("land")
-						break
-				#放出されず、かつループxでタイムアウト
-				elif tx2-tx1>=x:
-					tz1=time.time()
-					tz2=tz1
-					print("X timeout")
-					#ループzのタイムアウト判定
-					while(tz2-tz1<=z):
-						tz2=time.time()
-						PRESS=bme280Data[1]
-						deltP=PRESS
-						bme280Data=BME280.bme280_read()	#更新
-						PRESS=bme280Data[1]
-						deltP=deltP-PRESS
-						print(PRESS)
-						#3秒ごとに判定.
-						time.sleep(3)
-						if abs(deltP)<deltPmax:
-							Pcount+=1
-						elif abs(deltP)>deltPmax:
-							Pcount=0
-						if Pcount>5:
-							preslandjudge=True
-							print("preslandjudge")
-						else:
-							preslandjudge=False
-						#気圧が変化しなければループzを抜ける
-						if  preslandjudge:
-							break
-					#ループz中でbreakが起きなければ続行、起きたら全体も抜ける
-					else:
-						break
+			# --- Release Judgement, "while" is for timeout --- #
+			while (time.time() - t_release_start <= t_release):
+				#luxjudge,lcount = Release.luxjudge()
+				pressjudge,acount = Release.pressjudge()
+				t1 = time.time()
+				if luxjudge == 1 or pressjudge == 1:
+					Other.saveLog(releaseLog, time.time() - t_start, "Release Judged by Sensor", luxjudge, pressjudge)
+					print("Rover has released")
 					break
-#溶断へ
-		print("outcasing")
-		close()
+				else:
+					print("Rover is in rocket")
+					IM920.Send("P3D")
+				# --- Save Log and Take Photo --- #
+				gpsData = GPS.readGPS()
+				Other.saveLog(releaseLog, time.time() - t_start, acount, gpsData, TSL2561.readLux(), BME280.bme280_read(), BMX055.bmx055_read())
+				photoName = Capture.Capture(photopath)
+				Other.saveLog(captureLog, time.time() - t_start, gpsData, BME280.bme280_read(), photoName)
+
+				IM920.Send("P3D")
+			else:
+				Other.saveLog(releaseLog, time.time() - t_start, "Release Judged by Timeout")
+				print("Release Timeout")
+			pi.write(22, 1)	#Turn on IM920
+			time.sleep(1)
+			IM920.Send("P3F")
+
+		# ------------------- Landing Phase ------------------- #
+		if(phaseChk <= 4):
+			Other.saveLog(phaseLog, "4", "Landing Phase Started", time.time() - t_start)
+			print("Landing Phase Started  {0}".format(time.time() - t_start))
+			IM920.Send("P4S")
+			t_land_start = time.time()
+
+			# --- Landing Judgement, "while" is for timeout --- #
+			while(time.time() - t_land_start <= t_land):
+				pressjudge, Pcount = Land.pressjudge()
+				#gpsjudge, gacount = Land.gpsjudge()
+
+				if pressjudge == 1: #and gpsjudge == 1:
+					Other.saveLog(landingLog, time.time() - t_start, "Land Judged by Sensor", pressjudge, gpsjudge)
+					print("Rover has Landed")
+					break
+				elif pressjudge == 0: #and gpsjudge == 0:
+				    print("Descend now taking photo")
+				#elif pressjudge == 1 : #or gpsjudge == 1:
+				#print("Landing JudgementNow")
+				
+				# --- Save Log and Take Photo--- #
+				for i in range(3):
+					Other.saveLog(landingLog ,time.time() - t_start, Pcount, gacount, GPS.readGPS(), BME280.bme280_read(), BMX055.bmx055_read())
+					photoName = Capture.Capture(photopath)
+					Other.saveLog(captureLog, time.time() - t_start, GPS.readGPS(), BME280.bme280_read(), photoName)
+
+				IM920.Send("P4D")
+			else:
+				Other.saveLog(landingLog, time.time() - t_start, "Landing Judged by Timeout")
+				print("Landing Timeout")
+			IM920.Send("P4F")
+
+		# ------------------- Melting Phase ------------------- #
+		if(phaseChk <= 5):
+			Other.saveLog(phaseLog,"5", "Melting Phase Started", time.time() - t_start)
+			print("Melting Phase Started")
+			IM920.Send("P5S")
+			Other.saveLog(meltingLog, time.time() - t_start, GPS.readGPS(), "Melting Start")
+			Melting.Melting(t_melt)
+			Other.saveLog(meltingLog, time.time() - t_start, GPS.readGPS(), "Melting Finished")
+			IM920.Send("P5F")
 	except KeyboardInterrupt:
 		close()
-		print("\r\nKeyboard Intruppted")
-	except Exception as e:
+		print("Keyboard Interrupt")
+		IM920.Send("KI")
+	except:
 		close()
-		IM920.Send("Error Occured")
-		IM920.Send("Program Stopped")
-		print(e.message) 
+		print(traceback.format_exc())
+		Other.saveLog(errorLog, time.time() - t_start, "Error")
+		Other.saveLog(errorLog, traceback.format_exc())
+		Other.saveLog(errorLog, "\n")
+		IM920.Send("EO")
