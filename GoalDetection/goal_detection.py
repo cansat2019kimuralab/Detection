@@ -3,9 +3,42 @@ import sys
 sys.path.append('/home/pi/git/kimuralab/SensorModuleTest/Camera')
 import cv2
 import numpy as np
+import math
 import Capture
 
-def GoalDetection(imgpath, H_min, H_max, S_thd):
+def curvingSwitch(GAP, add):
+	if abs(GAP) > 144:
+		return add
+	elif abs(GAP) > 128:
+		return add*0.9
+	elif abs(GAP) > 112:
+		return add*0.8
+	elif abs(GAP) > 96:
+		return add*0.7
+	elif abs(GAP) > 80:
+		return add*0.6
+	elif abs(GAP) > 64:
+		return add*0.5
+	elif abs(GAP) > 48:
+		return add*0.4
+	elif abs(GAP) > 32:
+		return add*0.3
+	elif abs(GAP) > 16:
+		return add*0.2
+	elif abs(GAP) >= 0:
+		return 0
+
+def calR2G(nowArea, nowGAP, SampArea, SampL, SampX, SampGAP):
+	nowL = SampL*math.sqrt(SampArea)/math.sqrt(nowArea)
+	print("nowL",nowL)
+	print("nowGAP",nowGAP)
+	nowX = SampX * math.sqrt((1000*nowL)**2 - nowGAP**2) / math.sqrt((1000*SampL)**2 - SampGAP**2) * nowGAP / SampGAP
+	print("nowX",nowX)
+	angR2G = math.degrees(math.asin(nowX/nowL))
+	print("angR2G",angR2G)
+	return [nowL, angR2G]
+
+def GoalDetection(imgpath, H_min, H_max, S_thd, G_thd):
 	imgname = Capture.Capture(imgpath)
 	img = cv2.imread(imgname)
 	hig, wid, col = img.shape
@@ -32,18 +65,18 @@ def GoalDetection(imgpath, H_min, H_max, S_thd):
 
 	#no goal
 	if max_area_contour == -1:
-		print( "There is not the target" )
+		#print( "There is not the target" )
 		return [-1, 0, -1, imgname]
 
 	if max_area <= 100:
-		print( "There is not the target" )
+		#print( "There is not the target" )
 		return [-1, 0, -1, imgname]
 
 	cnt = contours[max_area_contour]
 	print('Max area is',max_area)
 
 	#goal
-	if max_area >= 20000:
+	if max_area >= G_thd:
 		print( "GOAL" )
 		return [0, -1 ,0, imgname]
 
@@ -67,4 +100,5 @@ def GoalDetection(imgpath, H_min, H_max, S_thd):
 	return [1, max_area, GAP, imgname]
 
 if __name__ == "__main__":
-	GoalDetection("photo",200 ,10, 120)
+	goalflug, goalarea, goalGAP, photoname = GoalDetection("photo/photo",200 ,10, 120, 20000)
+	print("goalarea",goalarea, "goalGAP", goalGAP)
