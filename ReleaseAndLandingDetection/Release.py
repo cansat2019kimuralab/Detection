@@ -15,14 +15,14 @@ import GPS
 import TSL2561
 
 luxdata = []
-bme280Data = [0.0,0.0]
+bme280Data = [0.0,2000.0]
 lcount = 0
 acount = 0
 luxmax = 80
 deltAmax = 0.3
 pressjudge = 0
 luxjudge = 0
-secondlatestPRESS = 2000.0 #prevent first error judgemnt
+secondlatestPRESS = 0.0 #prevent first error judgemnt
 latestPRESS = 0.0
 
 def luxjudge():
@@ -57,5 +57,5 @@ def pressjudge():
 		#print("presjudge")
 	else:
 		pressjudge=0
-	#print(str(latestPRESS)+"	:	"+str(secondlatestPRESS)+"	:	"+str(deltA))
+	print(str(latestPRESS)+"	:	"+str(secondlatestPRESS)+"	:	"+str(deltA))
 	return pressjudge,acount
