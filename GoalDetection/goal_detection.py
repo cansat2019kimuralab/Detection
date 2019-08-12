@@ -65,39 +65,20 @@ def GoalDetection(imgpath, H_min, H_max, S_thd, G_thd):
 
 	#no goal
 	if max_area_contour == -1:
-		#print( "There is not the target" )
 		return [-1, 0, -1, imgname]
 
-	if max_area <= 100:
-		#print( "There is not the target" )
+	elif max_area <= 100:
 		return [-1, 0, -1, imgname]
-
-	cnt = contours[max_area_contour]
-	print('Max area is',max_area)
 
 	#goal
-	if max_area >= G_thd:
-		print( "GOAL" )
+	elif max_area >= G_thd:
 		return [0, -1 ,0, imgname]
-
-	#rectangle
-	x,y,w,h = cv2.boundingRect(cnt)
-
-	#center of the target <-> center of the picture (pixel)
-	#GAP = x+w/2-wid/2
-	GAP = x+w/2-160
-	#print("center of the picture is",wid)
-
-	if GAP > 0:
-		print('The target is', GAP, 'pixel to the RIGHT')
-
-	elif GAP < 0:
-		print('The target is', abs(GAP), 'pixel to the LEFT')
-
-	else :
-		print('The target is CENTER')
-
-	return [1, max_area, GAP, imgname]
+	else:
+		#rectangle
+		cnt = contours[max_area_contour]
+		x,y,w,h = cv2.boundingRect(cnt)
+		GAP = x+w/2-160
+		return [1, max_area, GAP, imgname]
 
 if __name__ == "__main__":
 	goalflug, goalarea, goalGAP, photoname = GoalDetection("photo/photo",200 ,10, 120, 20000)
