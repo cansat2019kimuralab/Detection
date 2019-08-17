@@ -67,7 +67,7 @@ def GoalDetection(imgpath, H_min, H_max, S_thd, G_thd):
 	if max_area_contour == -1:
 		return [-1, 0, -1, imgname]
 
-	elif max_area <= 100:
+	elif max_area <= 30:
 		return [-1, 0, -1, imgname]
 
 	#goal
@@ -83,7 +83,7 @@ def GoalDetection(imgpath, H_min, H_max, S_thd, G_thd):
 if __name__ == "__main__":
 	try:
 		while 1:
-			goalflug, goalarea, goalGAP, photoname = GoalDetection("photo/photo",200 ,10, 120, 20000)
+			goalflug, goalarea, goalGAP, photoname = GoalDetection("photo/photo",220 ,5, 180, 7000)
 			print("goalarea",goalarea, "goalGAP", goalGAP)
 	except KeyboardInterrupt:
 		print('stop')
