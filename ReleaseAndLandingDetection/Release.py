@@ -18,7 +18,7 @@ luxdata = []
 bme280Data = [0.0,2000.0]
 lcount = 0
 acount = 0
-luxmax = 80
+luxmax = 3000
 deltAmax = 0.25
 pressjudge = 0
 luxjudge = 0
@@ -37,8 +37,8 @@ def luxjudge():
 		#print("luxreleasejudge")
 	else:
 		luxjudge = 0
-	#print("lux"+"	"+str(luxdata[0])+"	:	"+str(luxdata[1]))
-	return luxjudge
+	print("lux"+"	"+str(luxdata[0])+"	:	"+str(luxdata[1]))
+	return luxjudge, lcount
 
 def pressjudge():
 	global bme280Data
@@ -52,7 +52,7 @@ def pressjudge():
 		acount += 1
 	elif deltA<deltAmax:
 		acount = 0
-	if acount>2:
+	if acount>4:
 		pressjudge = 1
 		#print("presjudge")
 	else:
