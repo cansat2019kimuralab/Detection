@@ -55,7 +55,13 @@ def ParaDetection(imgpath, H_min, H_max, S_thd):
 		return[-1, 0, "no picture"]
 
 if __name__ == "__main__":
-	f, a, n = ParaDetection("/home/pi/photo/photo", 200, 10, 120)
-	print("flug", f)
-	print("area", a)
-	print("name", n)
+	try:
+		while 1:
+			f, a, n = ParaDetection("/home/pi/photo/photo", 200, 10, 120)
+			print("flug", f)
+			print("area", a)
+			print("name", n)
+	except KeyboardInterrupt:
+		print('KI')
+	except:
+		print('EO')
