@@ -51,12 +51,8 @@ def ParaDetection(imgpath, H_min, H_max, S_thd):
 		else:
 			#print( "There is the Parachute" )
 			return [1, max_area, imgname]
-	
-	except KeyboardInterrupt:
-		print('KI')
-		return[-1, 0, "no picture"]
 	except:
-		return[-1, 0, "no picture"]
+		return[-1, 0, imgname]
 
 if __name__ == "__main__":
 	try:
