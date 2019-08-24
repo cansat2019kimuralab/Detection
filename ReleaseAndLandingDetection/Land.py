@@ -30,13 +30,13 @@ def pressjudge():
 	bme280Data=BME280.bme280_read()	#更新
 	latestPRESS=bme280Data[1]
 	deltP=abs(latestPRESS-secondlatestPRESS)
-	if abs(deltP)<deltPmax:
-		Pcount+=1
-	elif abs(deltP)>deltPmax:
-		Pcount=0
-	elif bme280Data==[0.0,0.0,0.0,0.0]:
+	if bme280Data==[0.0,0.0,0.0,0.0]:
 		print("BMEerror!")
 		preslandjudge=-1
+	elif deltP<deltPmax:
+		Pcount+=1
+	elif deltP>deltPmax:
+		Pcount=0
 	if Pcount>4:
 		preslandjudge=1
 		print("preslandjudge")
