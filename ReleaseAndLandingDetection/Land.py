@@ -13,6 +13,7 @@ import BMX055
 import IM920
 import GPS
 import TSL2561
+
 deltPmax=0.1
 deltHmax=5
 Pcount=0
@@ -20,6 +21,7 @@ GAcount=0
 bme280Data=[0.0,0.0]
 gpsData=[0.0,0.0,0.0,0.0,0.0,0.0]
 preslandjudge=0
+
 def pressjudge():
 	global Pcount
 	global bme280Data
@@ -33,11 +35,11 @@ def pressjudge():
 		Pcount=0
 	if Pcount>4:
 		preslandjudge=1
-		print("preslandjudge")
+		#print("preslandjudge")
 	else:
 		preslandjudge=0
-	print(str(latestPRESS)+"	:	"+"delt	"+str(deltP))
-	print("Pcount	"+str(Pcount))
+	#print(str(latestPRESS)+"	:	"+"delt	"+str(deltP))
+	#print("Pcount	"+str(Pcount))
 	return preslandjudge,Pcount
 
 def gpsjudge():
@@ -47,7 +49,7 @@ def gpsjudge():
 	gpsData=GPS.readGPS()
 	latestGheight=gpsData[3]
 	deltH=abs(float(latestGheight)-float(secondlatestGheight))
-	print(latestGheight)
+	#print(latestGheight)
 	#3秒ごとに判定
 	time.sleep(3)
 	if abs(deltH)<deltHmax:
@@ -56,8 +58,8 @@ def gpsjudge():
 		GAcount=0
 	if GAcount>4:
 		gpsjudge=1
-		print("GPSlandjudge")
+		#print("GPSlandjudge")
 	else:
 		gpsjudge=0
-	print("GAcount"+str(GAcount))
+	#print("GAcount"+str(GAcount))
 	return gpsjudge,GAcount
