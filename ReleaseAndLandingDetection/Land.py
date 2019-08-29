@@ -15,7 +15,7 @@ import GPS
 import TSL2561
 deltPmax=0.1
 deltHmax=5
-deltMmax=5
+deltMmax=0.1
 Pcount=0
 GAcount=0
 Mcount=0
