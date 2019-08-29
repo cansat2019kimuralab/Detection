@@ -16,10 +16,13 @@ import TSL2561
 
 deltPmax=0.1
 deltHmax=5
+deltMmax=0.1
 Pcount=0
 GAcount=0
-bme280Data=[0.0,0.0]
+Mcount=0
+bme280Data=[0.0,0.0,0.0,0.0]
 gpsData=[0.0,0.0,0.0,0.0,0.0,0.0]
+bmxData=[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0]
 preslandjudge=0
 
 def pressjudge():
@@ -29,9 +32,12 @@ def pressjudge():
 	bme280Data=BME280.bme280_read()	#更新
 	latestPRESS=bme280Data[1]
 	deltP=abs(latestPRESS-secondlatestPRESS)
-	if abs(deltP)<deltPmax:
+	if bme280Data==[0.0,0.0,0.0,0.0]:
+		print("BMEerror!")
+		preslandjudge=-1
+	elif deltP<deltPmax:
 		Pcount+=1
-	elif abs(deltP)>deltPmax:
+	elif deltP>deltPmax:
 		Pcount=0
 	if Pcount>4:
 		preslandjudge=1
@@ -51,10 +57,9 @@ def gpsjudge():
 	deltH=abs(float(latestGheight)-float(secondlatestGheight))
 	#print(latestGheight)
 	#3秒ごとに判定
-	time.sleep(3)
-	if abs(deltH)<deltHmax:
+	if deltH<deltHmax:
 		GAcount+=1
-	elif abs(deltH)>deltHmax :
+	elif deltH>deltHmax :
 		GAcount=0
 	if GAcount>4:
 		gpsjudge=1
@@ -63,3 +68,21 @@ def gpsjudge():
 		gpsjudge=0
 	#print("GAcount"+str(GAcount))
 	return gpsjudge,GAcount
+
+def bmxjudge():
+	global Mcount
+	global bmxData
+	secondlatestMdata=bmxData[1] #using accuracy y
+	bmxData=BMX055.bmx055_read()
+	latestMData=bmxData[8]
+	deltM=abs(latestMData-secondlatestMdata)
+	print(deltM)
+	if deltM<deltMmax:
+		Mcount+=1
+	elif deltM>deltMmax:
+		Mcount=0
+	if Mcount>7:
+		magnetlandjudge=1
+	else:
+		magnetlandjudge=0
+	return Mcount,magnetlandjudge
