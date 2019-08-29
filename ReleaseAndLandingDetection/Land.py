@@ -70,7 +70,7 @@ def gpsjudge():
 def bmxjudge():
 	global Mcount
 	global bmxData
-	secondlatestMdata=bmxData[8]
+	secondlatestMdata=bmxData[1] #using accuracy y
 	bmxData=BMX055.bmx055_read()
 	latestMData=bmxData[8]
 	deltM=abs(latestMData-secondlatestMdata)
