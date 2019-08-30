@@ -18,7 +18,7 @@ luxdata = []
 bme280Data = [0.0,2000.0]
 lcount = 0
 acount = 0
-luxmax = 3000
+luxmax = 100
 deltAmax = 0.25
 pressjudge = 0
 luxjudge = 0
@@ -37,7 +37,7 @@ def luxjudge():
 		#print("luxreleasejudge")
 	else:
 		luxjudge = 0
-	print("lux"+"	"+str(luxdata[0])+"	:	"+str(luxdata[1]))
+	#print("lux"+"	"+str(luxdata[0])+"	:	"+str(luxdata[1]))
 	return luxjudge, lcount
 
 def pressjudge():
@@ -57,5 +57,5 @@ def pressjudge():
 		#print("presjudge")
 	else:
 		pressjudge=0
-	print(str(latestPRESS)+"	:	"+str(secondlatestPRESS)+"	:	"+str(deltA))
+	#print(str(latestPRESS)+"	:	"+str(secondlatestPRESS)+"	:	"+str(deltA))
 	return pressjudge,acount
