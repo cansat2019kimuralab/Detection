@@ -43,9 +43,16 @@ def GoalDetection(img, H_min, H_max, S_thd, G_thd):
 		cv2.destroyAllWindows()
 		return [-1,-1]
 
-	#goal判定
+	
 
-	if max_area >= G_thd:
+	if max_area_contour == -1:
+			return [-1, 0, -1, imgname]
+
+	elif max_area <= 30:
+			return [-1, 0, -1, imgname]
+			
+	#goal判定
+	elif max_area >= G_thd:
 		print( "GOAL" )
 		cv2.waitKey()
 		cv2.destroyAllWindows()
@@ -66,12 +73,6 @@ def GoalDetection(img, H_min, H_max, S_thd, G_thd):
 
 	img = cv2.circle(img,(int(x+w/2),int(y+3*h/4)), 2, (255,0,0), -1, cv2.LINE_AA)
 
-
-	#距離計算
-	L_samp = 10		#基準距離
-	S_samp = 200	#基準面積
-	L = L_samp*math.sqrt(S_samp)/math.sqrt(max_area)
-
 	print('The target is', '{:.1f}'.format(L), 'm from here')
 
 	cv2.imshow("target", img)
@@ -81,5 +82,5 @@ def GoalDetection(img, H_min, H_max, S_thd, G_thd):
 	return [L,GAP]
 
 if __name__ == "__main__":
-	im = cv2.imread('target11.jpg')
+	im = cv2.imread('photo/photo66.jpg')
 	GoalDetection(im, 200 , 10, 130, 7000)
