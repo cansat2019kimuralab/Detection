@@ -60,7 +60,7 @@ def pressjudge():
 		deltA = latestPRESS - secondlatestPRESS
 		if 0.0 in bme280Data:
 			print("BMEerror!")
-			preslandjudge=-1
+			pressjudge=-1
 			acount=0
 		elif deltA>deltAmax:
 			acount += 1
