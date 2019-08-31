@@ -92,7 +92,7 @@ def photoreleasedetect(photoname):
 	print("Value(mean): %.2f" % (hsv.T[2].flatten().mean()))
 	print(int(hsv.T[2].flatten().mean()))
 	brightness=int(hsv.T[2].flatten().mean())
-	if brightness>200:
+	if brightness>100:
 		fcount+=1
 		if fcount > 5:
 			photojudge=1
