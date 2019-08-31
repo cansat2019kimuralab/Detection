@@ -13,7 +13,7 @@ import BMX055
 import IM920
 import GPS
 import TSL2561
-
+import math
 deltPmax=0.1
 deltHmax=5
 gyromax=20
@@ -73,9 +73,9 @@ def bmxjudge():
 	global Mcount
 	global bmxData
 	bmxData=BMX055.bmx055_read()
-	gyrox=bmxData[3] #using gyro
-	gyroy=bmxData[4]
-	gyroz=bmxData[5]
+	gyrox=math.fabs(bmxData[3]) #using gyro
+	gyroy=math.fabs(bmxData[4])
+	gyroz=math.fabs(bmxData[5])
 
 	if gyrox < gyromax and gyroy < gyromax and gyroz < gyromax: 
 		Mcount+=1
