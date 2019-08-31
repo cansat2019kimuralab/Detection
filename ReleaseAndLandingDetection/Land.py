@@ -16,7 +16,7 @@ import TSL2561
 
 deltPmax=0.1
 deltHmax=5
-deltMmax=0.1
+gyromax=20
 Pcount=0
 GAcount=0
 Mcount=0
@@ -72,16 +72,16 @@ def gpsjudge():
 def bmxjudge():
 	global Mcount
 	global bmxData
-	secondlatestMdata=bmxData[1] #using accuracy y
 	bmxData=BMX055.bmx055_read()
-	latestMData=bmxData[8]
-	deltM=abs(latestMData-secondlatestMdata)
-	print(deltM)
-	if deltM<deltMmax:
+	gyrox=bmxData[3] #using gyro
+	gyroy=bmxData[4]
+	gyroz=bmxData[5]
+
+	if gyrox < gyromax and gyroy < gyromax and gyroz < gyromax: 
 		Mcount+=1
-	elif deltM>deltMmax:
+	else:
 		Mcount=0
-	if Mcount>7:
+	if Mcount > 5:
 		magnetlandjudge=1
 	else:
 		magnetlandjudge=0
