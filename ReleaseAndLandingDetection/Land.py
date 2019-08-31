@@ -41,12 +41,11 @@ def pressjudge():
 		preslandjudge=2
 	elif deltP<deltPmax:
 		Pcount+=1
-	elif deltP>deltPmax:
-		Pcount=0
-	if Pcount>4:
-		preslandjudge=1
-		#print("preslandjudge")
+		if Pcount>4:
+			preslandjudge=1
+			#print("preslandjudge")
 	else:
+		Pcount=0
 		preslandjudge=0
 	#print(str(latestPRESS)+"	:	"+"delt	"+str(deltP))
 	#print("Pcount	"+str(Pcount))
@@ -63,11 +62,12 @@ def gpsjudge():
 	#3秒ごとに判定
 	if deltH<deltHmax:
 		GAcount+=1
+		if GAcount>4:
+			gpsjudge=1
+			#print("GPSlandjudge")
 	elif deltH>deltHmax :
 		GAcount=0
-	if GAcount>4:
-		gpsjudge=1
-		#print("GPSlandjudge")
+
 	else:
 		gpsjudge=0
 	#print("GAcount"+str(GAcount))
@@ -85,11 +85,10 @@ def bmxjudge():
 
 	if gyrox < gyromax and gyroy < gyromax and gyroz < gyromax: 
 		Mcount+=1
+		if Mcount > 9:
+			magnetlandjudge=1
 	else:
 		Mcount=0
-	if Mcount > 9:
-		magnetlandjudge=1
-	else:
 		magnetlandjudge=0
 	return magnetlandjudge,Mcount
 

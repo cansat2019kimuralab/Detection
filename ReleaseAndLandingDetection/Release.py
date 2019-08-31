@@ -35,13 +35,12 @@ def luxjudge():
 		luxdata = TSL2561.readLux()
 		if luxdata[0]>luxmax or luxdata[1]>luxmax:
 			lcount += 1
-		elif luxdata[0]<luxmax and luxdata[1]<luxmax:
-			lcount = 0
-		if lcount>4:
-			luxjudge = 1
-			#print("luxreleasejudge")
+			if lcount>4:
+				luxjudge = 1
+				#print("luxreleasejudge")
 		else:
 			luxjudge = 0
+			lcount = 0
 		#print("lux"+"	"+str(luxdata[0])+"	:	"+str(luxdata[1]))
 	except:
 		print(traceback.format_exc())
@@ -64,11 +63,12 @@ def pressjudge():
 			acount=0
 		elif deltA>deltAmax:
 			acount += 1
+			if acount>4:
+				pressjudge = 1
+				#print("presjudge")
 		elif deltA<deltAmax:
 			acount = 0
-		if acount>4:
-			pressjudge = 1
-			#print("presjudge")
+
 		else:
 			pressjudge=0
 		#print(str(latestPRESS)+"	:	"+str(secondlatestPRESS)+"	:	"+str(deltA))
@@ -91,10 +91,10 @@ def photoreleasejudge(photoname):
 	brightness=int(hsv.T[2].flatten().mean())
 	if brightness>200:
 		fcount+=1
+		if fcount > 5:
+			photojudge=1
 	elif brightness<=200:
 		fcount=0
-	if fcount > 5:
-		photojudge=1
 	else:
 		photojudge=0
 	return photojudge,fcount
