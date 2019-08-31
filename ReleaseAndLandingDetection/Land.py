@@ -50,7 +50,7 @@ def pressdetect():
 		presslandjudge=0
 	#print(str(latestPRESS)+"	:	"+"delt	"+str(deltP))
 	#print("Pcount	"+str(Pcount))
-	return preslandjudge,Pcount
+	return presslandjudge,Pcount
 
 def gpsdetect():
 	global GAcount
