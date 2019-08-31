@@ -87,7 +87,7 @@ def bmxjudge():
 		Mcount+=1
 	else:
 		Mcount=0
-	if Mcount > 5:
+	if Mcount > 9:
 		magnetlandjudge=1
 	else:
 		magnetlandjudge=0
