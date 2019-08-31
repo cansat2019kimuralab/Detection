@@ -31,6 +31,7 @@ latestPRESS = 0.0
 
 def luxdetect():
 	global lcount
+	luxjudge = 0
 	try:
 		luxdata = TSL2561.readLux()
 		if luxdata[0]>luxmax or luxdata[1]>luxmax:
@@ -52,6 +53,7 @@ def luxdetect():
 def pressdetect():
 	global bme280Data
 	global acount
+	pressjudge = 0
 	try:
 		secondlatestPRESS = bme280Data[1]
 		bme280Data = BME280.bme280_read()	#更新
