@@ -79,6 +79,8 @@ def bmxjudge():
 	gyrox=math.fabs(bmxData[3]) #using gyro
 	gyroy=math.fabs(bmxData[4])
 	gyroz=math.fabs(bmxData[5])
+	print(bmxData)
+	print(Mcount)
 
 	if gyrox < gyromax and gyroy < gyromax and gyroz < gyromax: 
 		Mcount+=1
