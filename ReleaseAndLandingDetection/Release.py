@@ -61,7 +61,7 @@ def pressjudge():
 	#print(str(latestPRESS)+"	:	"+str(secondlatestPRESS)+"	:	"+str(deltA))
 	return pressjudge,acount
 
-def photoreleasejudge():
+def photoreleasejudge(imgpath):
 		imgname = Capture.Capture(imgpath)
 		img = cv2.imread(imgname)
 		img = cv2.imread(sys.argv[1],1) # 0=grayscale, 1=color
@@ -72,5 +72,7 @@ def photoreleasejudge():
 		print("Value(mean): %.2f" % (hsv.T[2].flatten().mean()))
 
 if __name__ == "__main__":
-	photoreleasejudge()
+	
+	photopath = "/home/pi/photo/photo"	
+	photoreleasejudge(photopath)
 	print("finish")
