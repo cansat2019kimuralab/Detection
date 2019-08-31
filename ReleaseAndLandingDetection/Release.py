@@ -61,9 +61,8 @@ def pressjudge():
 	#print(str(latestPRESS)+"	:	"+str(secondlatestPRESS)+"	:	"+str(deltA))
 	return pressjudge,acount
 
-def photoreleasejudge(imgpath):
-		imgname = Capture.Capture(imgpath)
-		img = cv2.imread(imgname)
+def photoreleasejudge(photoname):
+		img = cv2.imread(photoname)
 		img = cv2.imread(sys.argv[1],1) # 0=grayscale, 1=color
 		hsv = cv2.cvtColor(img,cv2.COLOR_BGR2HSV)
 
@@ -73,6 +72,6 @@ def photoreleasejudge(imgpath):
 
 if __name__ == "__main__":
 	
-	photopath = "/home/pi/photo/photo"	
-	photoreleasejudge(photopath)
+	photoname = ""/home/pi/photo/photo21.jpg"" 	
+	photoreleasejudge(photoname)
 	print("finish")
