@@ -62,8 +62,7 @@ def pressjudge():
 	return pressjudge,acount
 
 def photoreleasejudge(photoname):
-		img = cv2.imread(photoname)
-		img = cv2.imread(sys.argv[1],1) # 0=grayscale, 1=color
+		img = cv2.imread(photoname,1) # 0=grayscale, 1=color
 		hsv = cv2.cvtColor(img,cv2.COLOR_BGR2HSV)
 
 		print("Shape: {0}".format(hsv.shape))
