@@ -19,10 +19,12 @@ luxdata = []
 bme280Data = [0.0,2000.0]
 lcount = 0
 acount = 0
+fcount = 0
 luxmax = 100
 deltAmax = 0.25
 pressjudge = 0
 luxjudge = 0
+photojudge = 0
 secondlatestPRESS = 0.0 #prevent first error judgemnt
 latestPRESS = 0.0
 
@@ -62,13 +64,24 @@ def pressjudge():
 	return pressjudge,acount
 
 def photoreleasejudge(photoname):
-		img = cv2.imread(photoname,1) # 0=grayscale, 1=color
-		hsv = cv2.cvtColor(img,cv2.COLOR_BGR2HSV)
+	global fcount
+	img = cv2.imread(photoname,1) # 0=grayscale, 1=color
+	hsv = cv2.cvtColor(img,cv2.COLOR_BGR2HSV)
 
-		print("Shape: {0}".format(hsv.shape))
-		print("Salute(mean): %.2f" % (hsv.T[1].flatten().mean()))
-		print("Value(mean): %.2f" % (hsv.T[2].flatten().mean()))
-		print(int(hsv.T[2].flatten().mean()))
+	print("Shape: {0}".format(hsv.shape))
+	print("Salute(mean): %.2f" % (hsv.T[1].flatten().mean()))
+	print("Value(mean): %.2f" % (hsv.T[2].flatten().mean()))
+	print(int(hsv.T[2].flatten().mean()))
+	brightness=int(hsv.T[2].flatten().mean())
+	if brightness>200:
+		fcount+=1
+	elif brightness<=200:
+		fcount=0
+	if fcount > 5:
+		photojudge=1
+	else:
+		photojudge=0
+	return photojudge,fcount
 
 if __name__ == "__main__":
 	photoname = "/home/pi/photo/photo34.jpg"
