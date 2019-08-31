@@ -13,7 +13,8 @@ import BMX055
 import IM920
 import GPS
 import TSL2561
-
+import Capture
+import cv2
 luxdata = []
 bme280Data = [0.0,2000.0]
 lcount = 0
@@ -59,3 +60,17 @@ def pressjudge():
 		pressjudge=0
 	#print(str(latestPRESS)+"	:	"+str(secondlatestPRESS)+"	:	"+str(deltA))
 	return pressjudge,acount
+
+def photoreleasejudge():
+		imgname = Capture.Capture(imgpath)
+		img = cv2.imread(imgname)
+		img = cv2.imread(sys.argv[1],1) # 0=grayscale, 1=color
+		hsv = cv2.cvtColor(img,cv2.COLOR_BGR2HSV)
+
+		print("Shape: {0}".format(hsv.shape))
+		print("Salute(mean): %.2f" % (hsv.T[1].flatten().mean()))
+		print("Value(mean): %.2f" % (hsv.T[2].flatten().mean()))
+
+if __name__ == "__main__":
+	photoreleasejudge()
+	print("finish")
