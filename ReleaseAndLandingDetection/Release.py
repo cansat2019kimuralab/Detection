@@ -83,6 +83,7 @@ def pressdetect():
 
 def photoreleasedetect(photoname):
 	global fcount
+	photojudge = 0
 	img = cv2.imread(photoname,1) # 0=grayscale, 1=color
 	hsv = cv2.cvtColor(img,cv2.COLOR_BGR2HSV)
 
