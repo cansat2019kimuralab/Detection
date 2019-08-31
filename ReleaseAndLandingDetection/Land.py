@@ -81,7 +81,7 @@ def bmxjudge():
 	gyroy=math.fabs(bmxData[4])
 	gyroz=math.fabs(bmxData[5])
 	print(bmxData)
-	print(Mcount)
+
 
 	if gyrox < gyromax and gyroy < gyromax and gyroz < gyromax: 
 		Mcount+=1
@@ -98,7 +98,7 @@ if __name__ == "__main__":
 		Mcount,magnetlandjudge = bmxjudge()
 		while magnetlandjudge==0:
 			Mcount,magnetlandjudge = bmxjudge()
-			print(str(Mcount)+str(magnetlandjudge))
+			print("Mcount "+str(Mcount))
 			time.sleep (1)
 	except:
 		print(traceback.format_exc())
