@@ -35,6 +35,9 @@ def pressjudge():
 	if bme280Data==[0.0,0.0,0.0,0.0]:
 		print("BMEerror!")
 		preslandjudge=-1
+	elif 0.0 in bme280Data:
+		print("BMEerror!")
+		preslandjudge=-1
 	elif deltP<deltPmax:
 		Pcount+=1
 	elif deltP>deltPmax:
