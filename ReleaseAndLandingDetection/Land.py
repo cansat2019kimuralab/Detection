@@ -43,7 +43,7 @@ def pressdetect():
 	elif deltP<deltPmax:
 		Pcount+=1
 		if Pcount>4:
-			preslandjudge=1
+			presslandjudge=1
 			#print("preslandjudge")
 	else:
 		Pcount=0
