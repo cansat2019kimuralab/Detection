@@ -68,7 +68,7 @@ def photoreleasejudge(photoname):
 		print("Shape: {0}".format(hsv.shape))
 		print("Salute(mean): %.2f" % (hsv.T[1].flatten().mean()))
 		print("Value(mean): %.2f" % (hsv.T[2].flatten().mean()))
-		print(type(hsv.T[2].flatten().mean())
+		print(int(hsv.T[2].flatten().mean()))
 
 if __name__ == "__main__":
 	photoname = "/home/pi/photo/photo34.jpg"
