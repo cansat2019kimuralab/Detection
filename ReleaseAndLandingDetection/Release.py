@@ -15,6 +15,7 @@ import GPS
 import TSL2561
 import Capture
 import cv2
+import traceback
 luxdata = []
 bme280Data = [0.0,2000.0]
 lcount = 0
@@ -29,39 +30,54 @@ secondlatestPRESS = 0.0 #prevent first error judgemnt
 latestPRESS = 0.0
 
 def luxjudge():
-	luxdata = TSL2561.readLux()
 	global lcount
-	if luxdata[0]>luxmax or luxdata[1]>luxmax:
-		lcount += 1
-	elif luxdata[0]<luxmax and luxdata[1]<luxmax:
+	try:
+		luxdata = TSL2561.readLux()
+		if luxdata[0]>luxmax or luxdata[1]>luxmax:
+			lcount += 1
+		elif luxdata[0]<luxmax and luxdata[1]<luxmax:
+			lcount = 0
+		if lcount>4:
+			luxjudge = 1
+			#print("luxreleasejudge")
+		else:
+			luxjudge = 0
+		#print("lux"+"	"+str(luxdata[0])+"	:	"+str(luxdata[1]))
+	except:
+		print(traceback.format_exc())
 		lcount = 0
-	if lcount>4:
-		luxjudge = 1
-		#print("luxreleasejudge")
-	else:
-		luxjudge = 0
-	#print("lux"+"	"+str(luxdata[0])+"	:	"+str(luxdata[1]))
-	return luxjudge, lcount
+		luxjudge = -1
+	finally:
+		return luxjudge, lcount
 
 def pressjudge():
 	global bme280Data
 	global acount
-	
-	secondlatestPRESS = bme280Data[1]
-	bme280Data = BME280.bme280_read()	#更新
-	latestPRESS = bme280Data[1]
-	deltA = latestPRESS - secondlatestPRESS
-	if deltA>deltAmax:
-		acount += 1
-	elif deltA<deltAmax:
+	try:
+		secondlatestPRESS = bme280Data[1]
+		bme280Data = BME280.bme280_read()	#更新
+		latestPRESS = bme280Data[1]
+		deltA = latestPRESS - secondlatestPRESS
+		if 0.0 in bme280Data:
+			print("BMEerror!")
+			preslandjudge=-1
+			acount=0
+		elif deltA>deltAmax:
+			acount += 1
+		elif deltA<deltAmax:
+			acount = 0
+		if acount>4:
+			pressjudge = 1
+			#print("presjudge")
+		else:
+			pressjudge=0
+		#print(str(latestPRESS)+"	:	"+str(secondlatestPRESS)+"	:	"+str(deltA))
+	except:
+		print(traceback.format_exc())
 		acount = 0
-	if acount>4:
-		pressjudge = 1
-		#print("presjudge")
-	else:
-		pressjudge=0
-	#print(str(latestPRESS)+"	:	"+str(secondlatestPRESS)+"	:	"+str(deltA))
-	return pressjudge,acount
+		pressjudge = -1
+	finally:
+		return pressjudge,acount
 
 def photoreleasejudge(photoname):
 	global fcount
