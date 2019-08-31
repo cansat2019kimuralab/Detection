@@ -71,6 +71,6 @@ def photoreleasejudge(photoname):
 		print(hsv.T[2].flatten().mean())
 
 if __name__ == "__main__":
-	photoname = "/home/pi/photo/photo1.jpg"
+	photoname = "/home/pi/photo/photo34.jpg"
 	photoreleasejudge(photoname)
 	print("finish")
