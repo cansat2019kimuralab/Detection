@@ -24,21 +24,22 @@ Mcount=0
 bme280Data=[0.0,0.0,0.0,0.0]
 gpsData=[0.0,0.0,0.0,0.0,0.0,0.0]
 bmxData=[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0]
-preslandjudge=0
+presslandjudge=0
 
 def pressdetect():
 	global Pcount
 	global bme280Data
+	presslandjudge=0
 	secondlatestPRESS=bme280Data[1]
 	bme280Data=BME280.bme280_read()	#更新
 	latestPRESS=bme280Data[1]
 	deltP=abs(latestPRESS-secondlatestPRESS)
 	if bme280Data==[0.0,0.0,0.0,0.0]:
 		print("BMEerror!")
-		preslandjudge=2
+		presslandjudge=2
 	elif 0.0 in bme280Data:
 		print("BMEerror!")
-		preslandjudge=2
+		presslandjudge=2
 	elif deltP<deltPmax:
 		Pcount+=1
 		if Pcount>4:
@@ -46,7 +47,7 @@ def pressdetect():
 			#print("preslandjudge")
 	else:
 		Pcount=0
-		preslandjudge=0
+		presslandjudge=0
 	#print(str(latestPRESS)+"	:	"+"delt	"+str(deltP))
 	#print("Pcount	"+str(Pcount))
 	return preslandjudge,Pcount
@@ -54,6 +55,7 @@ def pressdetect():
 def gpsdetect():
 	global GAcount
 	global gpsData
+	gpsjudge = 0
 	secondlatestGheight=gpsData[3]
 	gpsData=GPS.readGPS()
 	latestGheight=gpsData[3]
@@ -76,6 +78,7 @@ def gpsdetect():
 def bmxjudetect():
 	global Mcount
 	global bmxData
+	magnetlandjudge = 0
 	bmxData=BMX055.bmx055_read()
 	gyrox=math.fabs(bmxData[3]) #using gyro
 	gyroy=math.fabs(bmxData[4])
