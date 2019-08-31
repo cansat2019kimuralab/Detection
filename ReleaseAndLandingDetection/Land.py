@@ -91,7 +91,7 @@ def bmxjudge():
 		magnetlandjudge=1
 	else:
 		magnetlandjudge=0
-	return Mcount,magnetlandjudge
+	return magnetlandjudge,Mcount
 
 if __name__ == "__main__":
 	try:
