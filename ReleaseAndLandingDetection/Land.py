@@ -75,7 +75,7 @@ def gpsdetect():
 	#print("GAcount"+str(GAcount))
 	return gpsjudge,GAcount
 
-def bmxjudetect():
+def bmxdetect():
 	global Mcount
 	global bmxData
 	magnetlandjudge = 0
