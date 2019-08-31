@@ -72,6 +72,6 @@ def photoreleasejudge(photoname):
 
 if __name__ == "__main__":
 	
-	photoname = ""/home/pi/photo/photo21.jpg"" 	
+	photoname = "/home/pi/photo/photo21.jpg"
 	photoreleasejudge(photoname)
 	print("finish")
