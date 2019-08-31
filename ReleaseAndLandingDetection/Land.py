@@ -35,10 +35,10 @@ def pressjudge():
 	deltP=abs(latestPRESS-secondlatestPRESS)
 	if bme280Data==[0.0,0.0,0.0,0.0]:
 		print("BMEerror!")
-		preslandjudge=-1
+		preslandjudge=2
 	elif 0.0 in bme280Data:
 		print("BMEerror!")
-		preslandjudge=-1
+		preslandjudge=2
 	elif deltP<deltPmax:
 		Pcount+=1
 	elif deltP>deltPmax:

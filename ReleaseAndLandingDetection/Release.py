@@ -46,7 +46,7 @@ def luxjudge():
 	except:
 		print(traceback.format_exc())
 		lcount = 0
-		luxjudge = -1
+		luxjudge = 2
 	finally:
 		return luxjudge, lcount
 
@@ -60,7 +60,7 @@ def pressjudge():
 		deltA = latestPRESS - secondlatestPRESS
 		if 0.0 in bme280Data:
 			print("BMEerror!")
-			pressjudge=-1
+			pressjudge=2
 			acount=0
 		elif deltA>deltAmax:
 			acount += 1
@@ -75,7 +75,7 @@ def pressjudge():
 	except:
 		print(traceback.format_exc())
 		acount = 0
-		pressjudge = -1
+		pressjudge = 2
 	finally:
 		return pressjudge,acount
 
