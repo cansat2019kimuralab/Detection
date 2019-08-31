@@ -29,7 +29,7 @@ photojudge = 0
 secondlatestPRESS = 0.0 #prevent first error judgemnt
 latestPRESS = 0.0
 
-def luxjudge():
+def luxdetect():
 	global lcount
 	try:
 		luxdata = TSL2561.readLux()
@@ -49,7 +49,7 @@ def luxjudge():
 	finally:
 		return luxjudge, lcount
 
-def pressjudge():
+def pressdetect():
 	global bme280Data
 	global acount
 	try:
@@ -79,7 +79,7 @@ def pressjudge():
 	finally:
 		return pressjudge,acount
 
-def photoreleasejudge(photoname):
+def photoreleasedetect(photoname):
 	global fcount
 	img = cv2.imread(photoname,1) # 0=grayscale, 1=color
 	hsv = cv2.cvtColor(img,cv2.COLOR_BGR2HSV)
@@ -101,5 +101,5 @@ def photoreleasejudge(photoname):
 
 if __name__ == "__main__":
 	photoname = "/home/pi/photo/photo34.jpg"
-	photoreleasejudge(photoname)
+	photoreleasedetect(photoname)
 	print("finish")

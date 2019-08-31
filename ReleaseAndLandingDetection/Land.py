@@ -26,7 +26,7 @@ gpsData=[0.0,0.0,0.0,0.0,0.0,0.0]
 bmxData=[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0]
 preslandjudge=0
 
-def pressjudge():
+def pressdetect():
 	global Pcount
 	global bme280Data
 	secondlatestPRESS=bme280Data[1]
@@ -51,7 +51,7 @@ def pressjudge():
 	#print("Pcount	"+str(Pcount))
 	return preslandjudge,Pcount
 
-def gpsjudge():
+def gpsdetect():
 	global GAcount
 	global gpsData
 	secondlatestGheight=gpsData[3]
@@ -73,7 +73,7 @@ def gpsjudge():
 	#print("GAcount"+str(GAcount))
 	return gpsjudge,GAcount
 
-def bmxjudge():
+def bmxjudetect():
 	global Mcount
 	global bmxData
 	bmxData=BMX055.bmx055_read()
