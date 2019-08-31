@@ -14,6 +14,7 @@ import IM920
 import GPS
 import TSL2561
 import math
+import traceback
 deltPmax=0.1
 deltHmax=5
 gyromax=20
@@ -91,3 +92,13 @@ def bmxjudge():
 	else:
 		magnetlandjudge=0
 	return Mcount,magnetlandjudge
+
+if __name__ == "__main__":
+	try:
+		Mcount,magnetlandjudge = bmxjudge()
+		while magnetlandjudge==0:
+			Mcount,magnetlandjudge = bmxjudge()
+			print(str(Mcount)+str(magnetlandjudge))
+			time.sleep (1)
+	except:
+		print(traceback.format_exc())
