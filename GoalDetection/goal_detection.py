@@ -8,6 +8,28 @@ import Capture
 
 i = 100
 
+def curvingSwitch(GAP, add):
+	if abs(GAP) > 144:
+		return add
+	elif abs(GAP) > 128:
+		return add*0.9
+	elif abs(GAP) > 112:
+		return add*0.8
+	elif abs(GAP) > 96:
+		return add*0.7
+	elif abs(GAP) > 80:
+		return add*0.6
+	elif abs(GAP) > 64:
+		return add*0.5
+	elif abs(GAP) > 48:
+		return add*0.4
+	elif abs(GAP) > 32:
+		return add*0.3
+	elif abs(GAP) > 16:
+		return add*0.2
+	elif abs(GAP) >= 0:
+		return 0
+
 def GoalDetection(imgpath, H_min, H_max, S_thd, G_thd):
 	global i
 	try:
