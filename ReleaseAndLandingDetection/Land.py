@@ -15,6 +15,8 @@ import GPS
 import math
 import traceback
 import Capture
+import cv2
+
 deltPmax=0.1
 deltHmax=5
 gyromax=20
@@ -109,15 +111,17 @@ def bmxdetect():
 	finally:
 		return gyrolandjudge,Mcount
 
-def photolanddetect(photoName):  #developping
+def photolanddetect():  #developping
 	global plcount
 	global photo
+	global photoName
 	photo = ""
+	photopath = "/home/pi/photo/photo"
 	photolandjudge=0
 	try:
 		img_1=cv2.imread(photoName)
 		photo = Capture.Capture(photopath)
-		img_2=cv2.imread(photoName)
+		img_2=cv2.imread(photo)
 		hist_g_1 = cv2.calcHist([img_1],[2],None,[256],[0,256])
 		hist_g_2 = cv2.calcHist([img_2],[2],None,[256],[0,256])
 		comp_hist = cv2.compareHist(hist_g_1, hist_g_2, cv2.HISTCMP_CORREL)
@@ -141,9 +145,9 @@ if __name__ == "__main__":
 	photopath = "/home/pi/photo/photo"
 	photoname = ""
 	try:
-		photolandjudge,plcount = photolanddetect(photoname)
+		photolandjudge,plcount = photolanddetect()
 		while photolandjudge==0:
-			plcount,photolandjudge = photolanddetect(photoname)
+			plcount,photolandjudge = photolanddetect()
 			print("plcount "+str(plcount))
 			time.sleep (1)
 	except:
