@@ -17,10 +17,10 @@ import traceback
 import Capture
 import cv2
 
-deltPThd=0.1
+presslandThd=0.1
 deltHmax=5
-gyroThd=20
-photolandThd=0.98
+gyrolandThd=20
+#photolandThd=0.98
 Pcount=0
 GAcount=0
 Mcount=0
@@ -33,7 +33,7 @@ photolandjudge=0
 photopath = 		"/home/pi/photo/photo"
 photoName =			""
 
-def pressdetect(deltPthd):
+def pressdetect(presslandthd):
 	try:
 		global Pcount
 		global bme280Data
@@ -48,7 +48,7 @@ def pressdetect(deltPthd):
 		elif 0.0 in bme280Data:
 			print("BMEerror!")
 			presslandjudge=2
-		elif deltP<deltPThd:
+		elif deltP<presslandThd:
 			Pcount+=1
 			if Pcount>4:
 				presslandjudge=1
@@ -88,7 +88,7 @@ def gpsdetect():  #使わない
 	#print("GAcount"+str(GAcount))
 	return gpsjudge,GAcount
 
-def bmxdetect(gyroThd):
+def bmxdetect(gyrolandThd):
 	global Mcount
 	global bmxData
 	gyrolandjudge = 0
@@ -99,7 +99,7 @@ def bmxdetect(gyroThd):
 		gyroz=math.fabs(bmxData[5])
 		print(bmxData)
 
-		if gyrox < gyroThd and gyroy < gyroThd and gyroz < gyroThd: 
+		if gyrox < gyrolandThd and gyroy < gyrolandThd and gyroz < gyrolandThd: 
 			Mcount+=1
 			if Mcount > 4:
 				gyrolandjudge=1
