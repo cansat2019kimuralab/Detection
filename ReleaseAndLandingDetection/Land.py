@@ -119,13 +119,13 @@ def photolanddetect():  #developping
 	photopath = "/home/pi/photo/photo"
 	photolandjudge=0
 	try:
-		img_1=cv2.imread(photoName)
+		img_1=cv2.imread("/home/pi/photo/photo")
 		photo = Capture.Capture(photopath)
 		img_2=cv2.imread(photo)
 		hist_g_1 = cv2.calcHist([img_1],[2],None,[256],[0,256])
 		hist_g_2 = cv2.calcHist([img_2],[2],None,[256],[0,256])
 		comp_hist = cv2.compareHist(hist_g_1, hist_g_2, cv2.HISTCMP_CORREL)
-		if comp_hist > 98:
+		if comp_hist > 0.98:
 			plcount += 1
 			if plcount > 3:
 				photolandjudge=1
