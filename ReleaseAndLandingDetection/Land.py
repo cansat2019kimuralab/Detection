@@ -14,6 +14,7 @@ import IM920
 import GPS
 import math
 import traceback
+import Capture
 deltPmax=0.1
 deltHmax=5
 gyromax=20
@@ -24,6 +25,9 @@ bme280Data=[0.0,0.0,0.0,0.0]
 gpsData=[0.0,0.0,0.0,0.0,0.0,0.0]
 bmxData=[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0]
 presslandjudge=0
+
+photopath = 		"/home/pi/photo/photo"
+photoName =			""
 
 def pressdetect():
 	try:
@@ -107,9 +111,12 @@ def bmxdetect():
 
 def photolanddetect(photoName):  #developping
 	global plcount
+	global photoName
+	photo = ""
 	photolandjudge=0
 	try:
-		img_1=cv2.imread(photoName-1)
+		img_1=cv2.imread(photoName)
+		photo = Capture.Capture(photopath)
 		img_2=cv2.imread(photoName)
 		hist_g_1 = cv2.calcHist([img_1],[2],None,[256],[0,256])
 		hist_g_2 = cv2.calcHist([img_2],[2],None,[256],[0,256])
@@ -124,14 +131,15 @@ def photolanddetect(photoName):  #developping
 	except:
 		print(traceback.format_exc())
 		plcount = 0
-		photolandjudge = 2
+		photolandjudge = 0
 	finally:
 		return photolandjudge,plcount
 
 		
 
 if __name__ == "__main__":
-	photoname = "/home/pi/photo/photo34.jpg"
+	photopath = "/home/pi/photo/photo"
+	photoname = ""
 	try:
 		photolandjudge,plcount = photolanddetect(photoname)
 		while photolandjudge==0:
