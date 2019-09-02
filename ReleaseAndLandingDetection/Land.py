@@ -17,10 +17,6 @@ import traceback
 import Capture
 import cv2
 
-presslandThd=0.1
-deltHmax=5
-gyrolandThd=20
-photolandThd=0.98
 Pcount=0
 GAcount=0
 Mcount=0
@@ -33,7 +29,7 @@ photolandjudge=0
 photopath = 		"/home/pi/photo/photo"
 photoName =			""
 
-def pressdetect(presslandthd):
+def pressdetect(presslandThd):
 	try:
 		global Pcount
 		global bme280Data

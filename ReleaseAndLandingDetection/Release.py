@@ -21,8 +21,7 @@ bme280Data = [0.0,2000.0]
 lcount = 0
 acount = 0
 fcount = 0
-luxreleaseThd = 100
-pressreleaseThd = 0.25
+
 pressjudge = 0
 luxjudge = 0
 photojudge = 0
@@ -96,7 +95,7 @@ def photoreleasedetect(photoName,photoreleaseThd):
 		fcount+=1
 		if fcount > 5:
 			photojudge=1
-	elif brightness<=200:
+	elif brightness<=photoreleaseThd:
 		fcount=0
 	else:
 		photojudge=0
