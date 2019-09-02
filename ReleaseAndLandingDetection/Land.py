@@ -23,6 +23,7 @@ gyromax=20
 Pcount=0
 GAcount=0
 Mcount=0
+plcount=0
 bme280Data=[0.0,0.0,0.0,0.0]
 gpsData=[0.0,0.0,0.0,0.0,0.0,0.0]
 bmxData=[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0]
@@ -124,8 +125,8 @@ def photolanddetect():  #developping
 		photo = Capture.Capture(photopath)
 		img_2=cv2.imread(photo)
 		print("a")
-		hist_g_1 = cv2.calcHist([img_1],[2],None,[256],[0,256])
-		hist_g_2 = cv2.calcHist([img_2],[2],None,[256],[0,256])
+		hist_g_1 = cv2.calcHist([img_1],[0],None,[256],[0,256])
+		hist_g_2 = cv2.calcHist([img_2],[0],None,[256],[0,256])
 		comp_hist = cv2.compareHist(hist_g_1, hist_g_2, cv2.HISTCMP_CORREL)
 		if comp_hist > 0.98:
 			plcount += 1
