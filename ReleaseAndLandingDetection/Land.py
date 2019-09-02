@@ -27,32 +27,38 @@ bmxData=[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0]
 presslandjudge=0
 
 def pressdetect():
-	global Pcount
-	global bme280Data
-	presslandjudge=0
-	secondlatestPRESS=bme280Data[1]
-	bme280Data=BME280.bme280_read()	#更新
-	latestPRESS=bme280Data[1]
-	deltP=abs(latestPRESS-secondlatestPRESS)
-	if bme280Data==[0.0,0.0,0.0,0.0]:
-		print("BMEerror!")
-		presslandjudge=2
-	elif 0.0 in bme280Data:
-		print("BMEerror!")
-		presslandjudge=2
-	elif deltP<deltPmax:
-		Pcount+=1
-		if Pcount>4:
-			presslandjudge=1
-			#print("preslandjudge")
-	else:
-		Pcount=0
+	try:
+		global Pcount
+		global bme280Data
 		presslandjudge=0
-	#print(str(latestPRESS)+"	:	"+"delt	"+str(deltP))
-	#print("Pcount	"+str(Pcount))
-	return presslandjudge,Pcount
+		secondlatestPRESS=bme280Data[1]
+		bme280Data=BME280.bme280_read()	#更新
+		latestPRESS=bme280Data[1]
+		deltP=abs(latestPRESS-secondlatestPRESS)
+		if bme280Data==[0.0,0.0,0.0,0.0]:
+			print("BMEerror!")
+			presslandjudge=2
+		elif 0.0 in bme280Data:
+			print("BMEerror!")
+			presslandjudge=2
+		elif deltP<deltPmax:
+			Pcount+=1
+			if Pcount>4:
+				presslandjudge=1
+				#print("preslandjudge")
+		else:
+			Pcount=0
+			presslandjudge=0
+		#print(str(latestPRESS)+"	:	"+"delt	"+str(deltP))
+		#print("Pcount	"+str(Pcount))
+	except:
+		print(traceback.format_exc())
+		Pcount = 0
+		presslandjudge = 2
+	finally:
+		return presslandjudge,Pcount
 
-def gpsdetect():
+def gpsdetect():  #使わない
 	global GAcount
 	global gpsData
 	gpsjudge = 0
@@ -78,22 +84,30 @@ def gpsdetect():
 def bmxdetect():
 	global Mcount
 	global bmxData
-	magnetlandjudge = 0
-	bmxData=BMX055.bmx055_read()
-	gyrox=math.fabs(bmxData[3]) #using gyro
-	gyroy=math.fabs(bmxData[4])
-	gyroz=math.fabs(bmxData[5])
-	print(bmxData)
+	gyrolandjudge = 0
+	try:
+		bmxData=BMX055.bmx055_read()
+		gyrox=math.fabs(bmxData[3]) #using gyro
+		gyroy=math.fabs(bmxData[4])
+		gyroz=math.fabs(bmxData[5])
+		print(bmxData)
 
+		if gyrox < gyromax and gyroy < gyromax and gyroz < gyromax: 
+			Mcount+=1
+			if Mcount > 9:
+				gyrolandjudge=1
+		else:
+			Mcount=0
+			gyrolandjudge=0
+	except:
+		print(traceback.format_exc())
+		Mcount = 0
+		gyrolandjudge = 2
+	finally:
+		return gyrolandjudge,Mcount
 
-	if gyrox < gyromax and gyroy < gyromax and gyroz < gyromax: 
-		Mcount+=1
-		if Mcount > 9:
-			magnetlandjudge=1
-	else:
-		Mcount=0
-		magnetlandjudge=0
-	return magnetlandjudge,Mcount
+def photolanddetect():  #developping
+	global plcount
 
 if __name__ == "__main__":
 	try:

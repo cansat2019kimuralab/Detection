@@ -56,7 +56,7 @@ def pressdetect():
 	pressjudge = 0
 	try:
 		secondlatestPRESS = bme280Data[1]
-		bme280Data = BME280.bme280_read()	#更新
+		bme280Data = BME280.bme280_read()	#update
 		latestPRESS = bme280Data[1]
 		deltA = latestPRESS - secondlatestPRESS
 		if 0.0 in bme280Data:
