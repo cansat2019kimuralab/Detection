@@ -13,44 +13,49 @@ import BMX055
 import IM920
 import GPS
 import TSL2561
-
+import math
+import traceback
 deltPmax=0.1
 deltHmax=5
-deltMmax=0.1
+gyromax=20
 Pcount=0
 GAcount=0
 Mcount=0
 bme280Data=[0.0,0.0,0.0,0.0]
 gpsData=[0.0,0.0,0.0,0.0,0.0,0.0]
 bmxData=[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0]
-preslandjudge=0
+presslandjudge=0
 
-def pressjudge():
+def pressdetect():
 	global Pcount
 	global bme280Data
+	presslandjudge=0
 	secondlatestPRESS=bme280Data[1]
 	bme280Data=BME280.bme280_read()	#更新
 	latestPRESS=bme280Data[1]
 	deltP=abs(latestPRESS-secondlatestPRESS)
 	if bme280Data==[0.0,0.0,0.0,0.0]:
 		print("BMEerror!")
-		preslandjudge=-1
+		presslandjudge=2
+	elif 0.0 in bme280Data:
+		print("BMEerror!")
+		presslandjudge=2
 	elif deltP<deltPmax:
 		Pcount+=1
-	elif deltP>deltPmax:
-		Pcount=0
-	if Pcount>4:
-		preslandjudge=1
-		#print("preslandjudge")
+		if Pcount>4:
+			presslandjudge=1
+			#print("preslandjudge")
 	else:
-		preslandjudge=0
+		Pcount=0
+		presslandjudge=0
 	#print(str(latestPRESS)+"	:	"+"delt	"+str(deltP))
 	#print("Pcount	"+str(Pcount))
-	return preslandjudge,Pcount
+	return presslandjudge,Pcount
 
-def gpsjudge():
+def gpsdetect():
 	global GAcount
 	global gpsData
+	gpsjudge = 0
 	secondlatestGheight=gpsData[3]
 	gpsData=GPS.readGPS()
 	latestGheight=gpsData[3]
@@ -59,30 +64,43 @@ def gpsjudge():
 	#3秒ごとに判定
 	if deltH<deltHmax:
 		GAcount+=1
+		if GAcount>4:
+			gpsjudge=1
+			#print("GPSlandjudge")
 	elif deltH>deltHmax :
 		GAcount=0
-	if GAcount>4:
-		gpsjudge=1
-		#print("GPSlandjudge")
+
 	else:
 		gpsjudge=0
 	#print("GAcount"+str(GAcount))
 	return gpsjudge,GAcount
 
-def bmxjudge():
+def bmxdetect():
 	global Mcount
 	global bmxData
-	secondlatestMdata=bmxData[1] #using accuracy y
+	magnetlandjudge = 0
 	bmxData=BMX055.bmx055_read()
-	latestMData=bmxData[8]
-	deltM=abs(latestMData-secondlatestMdata)
-	print(deltM)
-	if deltM<deltMmax:
+	gyrox=math.fabs(bmxData[3]) #using gyro
+	gyroy=math.fabs(bmxData[4])
+	gyroz=math.fabs(bmxData[5])
+	print(bmxData)
+
+
+	if gyrox < gyromax and gyroy < gyromax and gyroz < gyromax: 
 		Mcount+=1
-	elif deltM>deltMmax:
-		Mcount=0
-	if Mcount>7:
-		magnetlandjudge=1
+		if Mcount > 9:
+			magnetlandjudge=1
 	else:
+		Mcount=0
 		magnetlandjudge=0
-	return Mcount,magnetlandjudge
+	return magnetlandjudge,Mcount
+
+if __name__ == "__main__":
+	try:
+		Mcount,magnetlandjudge = bmxjudge()
+		while magnetlandjudge==0:
+			Mcount,magnetlandjudge = bmxjudge()
+			print("Mcount "+str(Mcount))
+			time.sleep (1)
+	except:
+		print(traceback.format_exc())
