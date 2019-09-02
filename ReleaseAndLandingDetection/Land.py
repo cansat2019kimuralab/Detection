@@ -20,7 +20,7 @@ import cv2
 presslandThd=0.1
 deltHmax=5
 gyrolandThd=20
-#photolandThd=0.98
+photolandThd=0.98
 Pcount=0
 GAcount=0
 Mcount=0
