@@ -111,7 +111,7 @@ def bmxdetect(gyrolandThd):
 
 def photolanddetect(photolandThd):  
 	global plcount
-	#global photoName
+	global photoName
 	photo = ""
 	photopath = "/home/pi/photo/photo"
 	try:
@@ -136,8 +136,8 @@ def photolanddetect(photolandThd):
 		print(traceback.format_exc())
 		plcount = 0
 		photolandjudge = 0
-	
-	return photolandjudge,plcount
+	finally:
+		return photolandjudge,plcount
 
 
 		
