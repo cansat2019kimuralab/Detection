@@ -23,11 +23,12 @@ gyromax=20
 Pcount=0
 GAcount=0
 Mcount=0
+plcount=0
 bme280Data=[0.0,0.0,0.0,0.0]
 gpsData=[0.0,0.0,0.0,0.0,0.0,0.0]
 bmxData=[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0]
 presslandjudge=0
-
+photolandjudge=0
 photopath = 		"/home/pi/photo/photo"
 photoName =			""
 
@@ -111,27 +112,26 @@ def bmxdetect():
 	finally:
 		return gyrolandjudge,Mcount
 
-def photolanddetect():  #developping
+def photolanddetect():  
 	global plcount
-	global photo
 	global photoName
 	photo = ""
 	photopath = "/home/pi/photo/photo"
-	photolandjudge=0
 	try:
-		img_1=cv2.imread("/home/pi/photo/photo")
-		print("1")
+		img_1=cv2.imread(photoName)
 		photo = Capture.Capture(photopath)
 		img_2=cv2.imread(photo)
-		print("a")
-		hist_g_1 = cv2.calcHist([img_1],[2],None,[256],[0,256])
-		hist_g_2 = cv2.calcHist([img_2],[2],None,[256],[0,256])
+		hist_g_1 = cv2.calcHist([img_1],[0],None,[256],[0,256])
+		hist_g_2 = cv2.calcHist([img_2],[0],None,[256],[0,256])
 		comp_hist = cv2.compareHist(hist_g_1, hist_g_2, cv2.HISTCMP_CORREL)
 		print(str(comp_hist))
+		photoName=photo
 		if comp_hist > 0.98:
 			plcount += 1
-			if plcount > 3:
+			if plcount > 4:
 				photolandjudge=1
+			else:
+				photolandjudge=0
 		else:
 			plcount=0
 			photolandjudge=0
@@ -139,19 +139,20 @@ def photolanddetect():  #developping
 		print(traceback.format_exc())
 		plcount = 0
 		photolandjudge = 0
-	finally:
-		return photolandjudge,plcount
+	
+	return photolandjudge,plcount
+
 
 		
 
 if __name__ == "__main__":
 	photopath = "/home/pi/photo/photo"
-	photoname = ""
+	photoName = ""
 	try:
-		photolandjudge,plcount = photolanddetect()
 		while photolandjudge==0:
-			plcount,photolandjudge = photolanddetect()
+			photolandjudge,plcount = photolanddetect()
 			print("plcount "+str(plcount))
-			time.sleep (1)
+			print("judge   "+str(photolandjudge))
+			time.sleep(1)
 	except:
 		print(traceback.format_exc())
