@@ -33,7 +33,7 @@ def luxdetect(luxreleaseThd):
 	luxjudge = 0
 	try:
 		luxdata = TSL2561.readLux()
-		if luxdata[0]>luxThd or luxdata[1]>luxThd:
+		if luxdata[0]>luxreleaseThd or luxdata[1]>luxreleaseThd:
 			lcount += 1
 			if lcount>4:
 				luxjudge = 1
