@@ -111,7 +111,7 @@ def bmxdetect():
 
 def photolanddetect(photoName):  #developping
 	global plcount
-	global photoName
+	global photo
 	photo = ""
 	photolandjudge=0
 	try:
