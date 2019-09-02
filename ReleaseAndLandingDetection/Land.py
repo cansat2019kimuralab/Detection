@@ -17,9 +17,10 @@ import traceback
 import Capture
 import cv2
 
-deltPmax=0.1
+deltPThd=0.1
 deltHmax=5
-gyromax=20
+gyroThd=20
+photolandThd=0.98
 Pcount=0
 GAcount=0
 Mcount=0
@@ -32,7 +33,7 @@ photolandjudge=0
 photopath = 		"/home/pi/photo/photo"
 photoName =			""
 
-def pressdetect():
+def pressdetect(deltPthd):
 	try:
 		global Pcount
 		global bme280Data
@@ -47,7 +48,7 @@ def pressdetect():
 		elif 0.0 in bme280Data:
 			print("BMEerror!")
 			presslandjudge=2
-		elif deltP<deltPmax:
+		elif deltP<deltPThd:
 			Pcount+=1
 			if Pcount>4:
 				presslandjudge=1
@@ -87,7 +88,7 @@ def gpsdetect():  #使わない
 	#print("GAcount"+str(GAcount))
 	return gpsjudge,GAcount
 
-def bmxdetect():
+def bmxdetect(gyroThd):
 	global Mcount
 	global bmxData
 	gyrolandjudge = 0
@@ -98,9 +99,9 @@ def bmxdetect():
 		gyroz=math.fabs(bmxData[5])
 		print(bmxData)
 
-		if gyrox < gyromax and gyroy < gyromax and gyroz < gyromax: 
+		if gyrox < gyroThd and gyroy < gyroThd and gyroz < gyroThd: 
 			Mcount+=1
-			if Mcount > 9:
+			if Mcount > 4:
 				gyrolandjudge=1
 		else:
 			Mcount=0
@@ -112,7 +113,7 @@ def bmxdetect():
 	finally:
 		return gyrolandjudge,Mcount
 
-def photolanddetect():  
+def photolanddetect(photolandThd):  
 	global plcount
 	global photoName
 	photo = ""
@@ -126,7 +127,7 @@ def photolanddetect():
 		comp_hist = cv2.compareHist(hist_g_1, hist_g_2, cv2.HISTCMP_CORREL)
 		print(str(comp_hist))
 		photoName=photo
-		if comp_hist > 0.98:
+		if comp_hist > photolandThd:
 			plcount += 1
 			if plcount > 4:
 				photolandjudge=1
@@ -148,9 +149,10 @@ def photolanddetect():
 if __name__ == "__main__":
 	photopath = "/home/pi/photo/photo"
 	photoName = ""
+	photolandThd=0.3
 	try:
 		while photolandjudge==0:
-			photolandjudge,plcount = photolanddetect()
+			photolandjudge,plcount = photolanddetect(photolandThd)
 			print("plcount "+str(plcount))
 			print("judge   "+str(photolandjudge))
 			time.sleep(1)
