@@ -21,20 +21,19 @@ bme280Data = [0.0,2000.0]
 lcount = 0
 acount = 0
 fcount = 0
-luxmax = 100
-deltAmax = 0.25
+
 pressjudge = 0
 luxjudge = 0
 photojudge = 0
 secondlatestPRESS = 0.0 #prevent first error judgemnt
 latestPRESS = 0.0
 
-def luxdetect():
+def luxdetect(luxreleaseThd):
 	global lcount
 	luxjudge = 0
 	try:
 		luxdata = TSL2561.readLux()
-		if luxdata[0]>luxmax or luxdata[1]>luxmax:
+		if luxdata[0]>luxreleaseThd or luxdata[1]>luxreleaseThd:
 			lcount += 1
 			if lcount>4:
 				luxjudge = 1
@@ -50,7 +49,7 @@ def luxdetect():
 	finally:
 		return luxjudge, lcount
 
-def pressdetect():
+def pressdetect(pressreleaseThd):
 	global bme280Data
 	global acount
 	pressjudge = 0
@@ -63,12 +62,12 @@ def pressdetect():
 			print("BMEerror!")
 			pressjudge=2
 			acount=0
-		elif deltA>deltAmax:
+		elif deltA>pressreleaseThd:
 			acount += 1
 			if acount>4:
 				pressjudge = 1
 				#print("presjudge")
-		elif deltA<deltAmax:
+		elif deltA<pressreleaseThd:
 			acount = 0
 
 		else:
@@ -81,10 +80,10 @@ def pressdetect():
 	finally:
 		return pressjudge,acount
 
-def photoreleasedetect(photoname):
+def photoreleasedetect(photoName,photoreleaseThd):
 	global fcount
 	photojudge = 0
-	img = cv2.imread(photoname,1) # 0=grayscale, 1=color
+	img = cv2.imread(photoName,1) # 0=grayscale, 1=color
 	hsv = cv2.cvtColor(img,cv2.COLOR_BGR2HSV)
 
 	print("Shape: {0}".format(hsv.shape))
@@ -92,17 +91,18 @@ def photoreleasedetect(photoname):
 	print("Value(mean): %.2f" % (hsv.T[2].flatten().mean()))
 	print(int(hsv.T[2].flatten().mean()))
 	brightness=int(hsv.T[2].flatten().mean())
-	if brightness>100:
+	if brightness>photoreleaseThd:
 		fcount+=1
 		if fcount > 5:
 			photojudge=1
-	elif brightness<=200:
+	elif brightness<=photoreleaseThd:
 		fcount=0
 	else:
 		photojudge=0
 	return photojudge,fcount
 
 if __name__ == "__main__":
-	photoname = "/home/pi/photo/photo34.jpg"
-	photoreleasedetect(photoname)
+	photoName = "/home/pi/photo/photo34.jpg"
+	photoreleaseThd=100
+	photoreleasedetect(photoName,photoreleaseThd)
 	print("finish")

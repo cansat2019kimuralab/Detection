@@ -15,21 +15,21 @@ import GPS
 import math
 import traceback
 import Capture
-deltPmax=0.1
-deltHmax=5
-gyromax=20
+import cv2
+
 Pcount=0
 GAcount=0
 Mcount=0
+plcount=0
 bme280Data=[0.0,0.0,0.0,0.0]
 gpsData=[0.0,0.0,0.0,0.0,0.0,0.0]
 bmxData=[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0]
 presslandjudge=0
-
+photolandjudge=0
 photopath = 		"/home/pi/photo/photo"
 photoName =			""
 
-def pressdetect():
+def pressdetect(presslandThd):
 	try:
 		global Pcount
 		global bme280Data
@@ -44,7 +44,7 @@ def pressdetect():
 		elif 0.0 in bme280Data:
 			print("BMEerror!")
 			presslandjudge=2
-		elif deltP<deltPmax:
+		elif deltP<presslandThd:
 			Pcount+=1
 			if Pcount>4:
 				presslandjudge=1
@@ -84,7 +84,7 @@ def gpsdetect():  #使わない
 	#print("GAcount"+str(GAcount))
 	return gpsjudge,GAcount
 
-def bmxdetect():
+def bmxdetect(gyrolandThd):
 	global Mcount
 	global bmxData
 	gyrolandjudge = 0
@@ -93,11 +93,11 @@ def bmxdetect():
 		gyrox=math.fabs(bmxData[3]) #using gyro
 		gyroy=math.fabs(bmxData[4])
 		gyroz=math.fabs(bmxData[5])
-		print(bmxData)
+		#print(bmxData)
 
-		if gyrox < gyromax and gyroy < gyromax and gyroz < gyromax: 
+		if gyrox < gyrolandThd and gyroy < gyrolandThd and gyroz < gyrolandThd: 
 			Mcount+=1
-			if Mcount > 9:
+			if Mcount > 4:
 				gyrolandjudge=1
 		else:
 			Mcount=0
@@ -109,22 +109,26 @@ def bmxdetect():
 	finally:
 		return gyrolandjudge,Mcount
 
-def photolanddetect(photoName):  #developping
+def photolanddetect(photolandThd):  
 	global plcount
 	#global photoName
 	photo = ""
-	photolandjudge=0
+	photopath = "/home/pi/photo/photo"
 	try:
 		img_1=cv2.imread(photoName)
 		photo = Capture.Capture(photopath)
-		img_2=cv2.imread(photoName)
-		hist_g_1 = cv2.calcHist([img_1],[2],None,[256],[0,256])
-		hist_g_2 = cv2.calcHist([img_2],[2],None,[256],[0,256])
+		img_2=cv2.imread(photo)
+		hist_g_1 = cv2.calcHist([img_1],[0],None,[256],[0,256])
+		hist_g_2 = cv2.calcHist([img_2],[0],None,[256],[0,256])
 		comp_hist = cv2.compareHist(hist_g_1, hist_g_2, cv2.HISTCMP_CORREL)
-		if comp_hist > 98:
+		print(str(comp_hist))
+		photoName=photo
+		if comp_hist > photolandThd:
 			plcount += 1
-			if plcount > 3:
+			if plcount > 4:
 				photolandjudge=1
+			else:
+				photolandjudge=0
 		else:
 			plcount=0
 			photolandjudge=0
@@ -132,19 +136,21 @@ def photolanddetect(photoName):  #developping
 		print(traceback.format_exc())
 		plcount = 0
 		photolandjudge = 0
-	finally:
-		return photolandjudge,plcount
+	
+	return photolandjudge,plcount
+
 
 		
 
 if __name__ == "__main__":
 	photopath = "/home/pi/photo/photo"
-	photoname = ""
+	photoName = ""
+	photolandThd=0.3
 	try:
-		photolandjudge,plcount = photolanddetect(photoname)
 		while photolandjudge==0:
-			plcount,photolandjudge = photolanddetect(photoname)
+			photolandjudge,plcount = photolanddetect(photolandThd)
 			print("plcount "+str(plcount))
-			time.sleep (1)
+			print("judge   "+str(photolandjudge))
+			time.sleep(1)
 	except:
 		print(traceback.format_exc())
