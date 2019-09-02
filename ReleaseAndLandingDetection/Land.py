@@ -93,7 +93,7 @@ def bmxdetect(gyrolandThd):
 		gyrox=math.fabs(bmxData[3]) #using gyro
 		gyroy=math.fabs(bmxData[4])
 		gyroz=math.fabs(bmxData[5])
-		print(bmxData)
+		#print(bmxData)
 
 		if gyrox < gyrolandThd and gyroy < gyrolandThd and gyroz < gyrolandThd: 
 			Mcount+=1
