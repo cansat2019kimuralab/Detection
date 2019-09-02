@@ -12,7 +12,6 @@ import BME280
 import BMX055
 import IM920
 import GPS
-import TSL2561
 import math
 import traceback
 deltPmax=0.1
