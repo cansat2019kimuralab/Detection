@@ -127,6 +127,7 @@ def photolanddetect():  #developping
 		hist_g_1 = cv2.calcHist([img_1],[2],None,[256],[0,256])
 		hist_g_2 = cv2.calcHist([img_2],[2],None,[256],[0,256])
 		comp_hist = cv2.compareHist(hist_g_1, hist_g_2, cv2.HISTCMP_CORREL)
+		print(str(comp_hist))
 		if comp_hist > 0.98:
 			plcount += 1
 			if plcount > 3:
