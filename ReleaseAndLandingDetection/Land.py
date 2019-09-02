@@ -106,7 +106,7 @@ def bmxdetect():
 	finally:
 		return gyrolandjudge,Mcount
 
-def photolanddetect():  #developping
+def photolanddetect(photoName):  #developping
 	global plcount
 	photolandjudge=0
 	try:
@@ -132,10 +132,11 @@ def photolanddetect():  #developping
 		
 
 if __name__ == "__main__":
+	photoname = "/home/pi/photo/photo34.jpg"
 	try:
-		photolandjudge,plcount = photolanddetect()
+		photolandjudge,plcount = photolanddetect(photoname)
 		while photolandjudge==0:
-			plcount,photolandjudge = photolanddetect()
+			plcount,photolandjudge = photolanddetect(photoname)
 			print("plcount "+str(plcount))
 			time.sleep (1)
 	except:
