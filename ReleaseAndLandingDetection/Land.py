@@ -108,13 +108,35 @@ def bmxdetect():
 
 def photolanddetect():  #developping
 	global plcount
+	photolandjudge=0
+	try:
+		img_1=cv2.imread(photoName-1)
+		img_2=cv2.imread(photoName)
+		hist_g_1 = cv2.calcHist([img_1],[2],None,[256],[0,256])
+		hist_g_2 = cv2.calcHist([img_2],[2],None,[256],[0,256])
+		comp_hist = cv2.compareHist(hist_g_1, hist_g_2, cv2.HISTCMP_CORREL)
+		if comp_hist > 98:
+			plcount += 1
+			if plcount > 3:
+				photolandjudge=1
+		else:
+			plcount=0
+			photolandjudge=0
+	except:
+		print(traceback.format_exc())
+		plcount = 0
+		photolandjudge = 2
+	finally:
+		return photolandjudge,plcount
+
+		
 
 if __name__ == "__main__":
 	try:
-		Mcount,magnetlandjudge = bmxjudge()
-		while magnetlandjudge==0:
-			Mcount,magnetlandjudge = bmxjudge()
-			print("Mcount "+str(Mcount))
+		photolandjudge,plcount = photolanddetect()
+		while photolandjudge==0:
+			plcount,photolandjudge = photolanddetect()
+			print("plcount "+str(plcount))
 			time.sleep (1)
 	except:
 		print(traceback.format_exc())
