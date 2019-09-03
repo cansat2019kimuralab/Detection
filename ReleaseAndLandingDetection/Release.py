@@ -22,37 +22,37 @@ lcount = 0
 acount = 0
 fcount = 0
 
-pressjudge = 0
-luxjudge = 0
-photojudge = 0
+pressreleasejudge = 0
+luxreleasejudge = 0
+photoreleasejudge = 0
 secondlatestPRESS = 0.0 #prevent first error judgemnt
 latestPRESS = 0.0
 
 def luxdetect(luxreleaseThd):
 	global lcount
-	luxjudge = 0
+	luxreleasejudge = 0
 	try:
 		luxdata = TSL2561.readLux()
 		if luxdata[0]>luxreleaseThd or luxdata[1]>luxreleaseThd:
 			lcount += 1
 			if lcount>4:
-				luxjudge = 1
+				luxreleasejudge = 1
 				#print("luxreleasejudge")
 		else:
-			luxjudge = 0
+			luxreleasejudge = 0
 			lcount = 0
 		#print("lux"+"	"+str(luxdata[0])+"	:	"+str(luxdata[1]))
 	except:
 		print(traceback.format_exc())
 		lcount = 0
-		luxjudge = 2
+		luxreleasejudge = 2
 	finally:
-		return luxjudge, lcount
+		return luxreleasejudge, lcount
 
 def pressdetect(pressreleaseThd):
 	global bme280Data
 	global acount
-	pressjudge = 0
+	pressreleasejudge = 0
 	try:
 		secondlatestPRESS = bme280Data[1]
 		bme280Data = BME280.bme280_read()	#update
@@ -60,29 +60,30 @@ def pressdetect(pressreleaseThd):
 		deltA = latestPRESS - secondlatestPRESS
 		if 0.0 in bme280Data:
 			print("BMEerror!")
-			pressjudge=2
+			pressreleasejudge=2
 			acount=0
 		elif deltA>pressreleaseThd:
 			acount += 1
 			if acount>4:
-				pressjudge = 1
+				pressreleasejudge = 1
 				#print("presjudge")
 		elif deltA<pressreleaseThd:
 			acount = 0
 
 		else:
-			pressjudge=0
+			pressreleasejudge=0
 		#print(str(latestPRESS)+"	:	"+str(secondlatestPRESS)+"	:	"+str(deltA))
 	except:
 		print(traceback.format_exc())
 		acount = 0
-		pressjudge = 2
+		pressreleasejudge = 2
 	finally:
-		return pressjudge,acount
+		#pressreleasejudge =2 #for debug
+		return pressreleasejudge,acount
 
 def photoreleasedetect(photoName,photoreleaseThd):
 	global fcount
-	photojudge = 0
+	photoreleasejudge = 0
 	img = cv2.imread(photoName,1) # 0=grayscale, 1=color
 	hsv = cv2.cvtColor(img,cv2.COLOR_BGR2HSV)
 
@@ -94,12 +95,12 @@ def photoreleasedetect(photoName,photoreleaseThd):
 	if brightness>photoreleaseThd:
 		fcount+=1
 		if fcount > 5:
-			photojudge=1
+			photoreleasejudge=1
 	elif brightness<=photoreleaseThd:
 		fcount=0
 	else:
-		photojudge=0
-	return photojudge,fcount
+		photoreleasejudge=0
+	return photoreleasejudge,fcount
 
 if __name__ == "__main__":
 	photoName = "/home/pi/photo/photo34.jpg"
