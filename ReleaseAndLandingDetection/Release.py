@@ -47,6 +47,7 @@ def luxdetect(luxreleaseThd):
 		lcount = 0
 		luxreleasejudge = 2
 	finally:
+		#luxreleasejudge = 2 # for debug
 		return luxreleasejudge, lcount
 
 def pressdetect(pressreleaseThd):
@@ -66,7 +67,6 @@ def pressdetect(pressreleaseThd):
 			acount += 1
 			if acount>4:
 				pressreleasejudge = 1
-				#print("presjudge")
 		elif deltA<pressreleaseThd:
 			acount = 0
 
