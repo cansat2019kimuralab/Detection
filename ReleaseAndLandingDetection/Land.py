@@ -107,6 +107,7 @@ def bmxdetect(gyrolandThd):
 		Mcount = 0
 		gyrolandjudge = 2
 	finally:
+		gyrolandjudge = 2 #for debug
 		return gyrolandjudge,Mcount
 
 def photolanddetect(photolandThd):  

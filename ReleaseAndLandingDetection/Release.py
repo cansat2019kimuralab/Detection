@@ -78,7 +78,7 @@ def pressdetect(pressreleaseThd):
 		acount = 0
 		pressreleasejudge = 2
 	finally:
-		#pressreleasejudge =2 #for debug
+		pressreleasejudge =2 #for debug
 		return pressreleasejudge,acount
 
 def photoreleasedetect(photoName,photoreleaseThd):
