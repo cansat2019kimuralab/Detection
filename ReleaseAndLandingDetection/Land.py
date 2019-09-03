@@ -41,9 +41,11 @@ def pressdetect(presslandThd):
 		if bme280Data==[0.0,0.0,0.0,0.0]:
 			print("BMEerror!")
 			presslandjudge=2
+			Pcount = 0
 		elif 0.0 in bme280Data:
 			print("BMEerror!")
 			presslandjudge=2
+			Pcount = 0
 		elif deltP<presslandThd:
 			Pcount+=1
 			if Pcount>4:

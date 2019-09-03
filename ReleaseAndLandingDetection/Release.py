@@ -47,6 +47,7 @@ def luxdetect(luxreleaseThd):
 		lcount = 0
 		luxreleasejudge = 2
 	finally:
+		luxreleasejudge = 2 # for debug
 		return luxreleasejudge, lcount
 
 def pressdetect(pressreleaseThd):
