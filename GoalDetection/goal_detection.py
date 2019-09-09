@@ -81,7 +81,7 @@ def GoalDetection(imgpath, H_min, H_max, S_thd, G_thd):
 if __name__ == "__main__":
 	try:
 		while 1:
-			goalflug, goalarea, goalGAP, photoname = GoalDetection("/home/pi/photo/photo",200 ,10, 130, 7000)
+			goalflug, goalarea, goalGAP, photoname = GoalDetection("/home/pi/photo/photo",200 ,20, 80, 7000)
 			print("goalflug", goalflug, "goalarea",goalarea, "goalGAP", goalGAP, "name", photoname)
 	except KeyboardInterrupt:
 		print('stop')
